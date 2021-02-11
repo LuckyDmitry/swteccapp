@@ -7,22 +7,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class DayOfWeekAdapter extends ArrayAdapter<DayOfWeek> {
+public class RightMenuAdapter extends ArrayAdapter<RigthMenuElement> {
 
-    private final Context context;
-    private final int mResources;
+    private Context context;
+    private int mResources;
 
-
-    public DayOfWeekAdapter(@NonNull Context context, int resource, @NonNull ArrayList<DayOfWeek> objects) {
+    public RightMenuAdapter(@NonNull Context context, int resource, @NonNull ArrayList<RigthMenuElement> objects) {
         super(context, resource, objects);
         this.context = context;
         this.mResources = resource;
@@ -32,19 +31,18 @@ public class DayOfWeekAdapter extends ArrayAdapter<DayOfWeek> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+
         LayoutInflater layoutInflater = LayoutInflater.from(context);
 
         convertView = layoutInflater.inflate(this.mResources, parent, false);
 
-        ImageView imageView = convertView.findViewById(R.id.weatherImageView);
-        TextView firstView = convertView.findViewById(R.id.temperatureTextView);
-        TextView secondView = convertView.findViewById(R.id.dateTextView);
+        CheckBox checkBox = convertView.findViewById(R.id.main_activity__placeCheckBox);
+        TextView textView = convertView.findViewById(R.id.main_activity__placeTextView);
 
-        imageView.setImageResource(getItem(position).getWeatherImage());
-        secondView.setText(getItem(position).getDate());
-
-        firstView.setText(getItem(position).getTemperature());
+        textView.setText(getItem(position).getPlace());
+        checkBox.setChecked(true);
 
         return convertView;
+
     }
 }

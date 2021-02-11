@@ -6,71 +6,64 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-<!--    <TextView-->
-<!--        android:id="@+id/main_activity__firstData"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="February 7, 2020"-->
-<!--        app:layout_constraintBottom_toTopOf="@id/main_activity__firstDataImage"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintVertical_chainStyle="packed" />-->
-
-<!--    <ImageView-->
-<!--        android:id="@+id/main_activity__firstDataImage"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="50dp"-->
-<!--        android:adjustViewBounds="true"-->
-<!--        android:src="@drawable/cloudy"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/main_activity__firstData"-->
-
-<!--        />-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/main_activity__firstTemp"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="23*"-->
-<!--        android:textSize="40sp"-->
-<!--        app:layout_constraintStart_toEndOf="@id/main_activity__firstDataImage"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/main_activity__firstData" />-->
-
-
-<!--    <TextView-->
-<!--        android:id="@+id/main_activity__secondData"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="10dp"-->
-<!--        android:text="February 8, 2020"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/main_activity__firstTemp" />-->
-
-<!--    <ImageView-->
-<!--        android:id="@+id/main_activity__secondDataImage"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="50dp"-->
-<!--        android:adjustViewBounds="true"-->
-<!--        android:src="@drawable/rain"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/main_activity__secondData"-->
-
-<!--        />-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/main_activity__secondTemp"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="12*"-->
-<!--        android:textSize="40sp"-->
-<!--        app:layout_constraintStart_toEndOf="@id/main_activity__secondDataImage"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/main_activity__secondData" />-->
+    <ListView
+        android:id="@+id/main_activity__dateAndWeatherListView"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ListView
-        android:id="@+id/listView"
+        android:id="@+id/main_activity__placesAndCheckBoxesListView"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/main_activity__mainRigthGL"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="260dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/main_activity__mainLeftGL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="260dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/main_activity__mainCenterGL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.35"
         />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/main_activity__secondMainCenterGL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.50"
+        />
+
+        <ImageButton
+            android:id="@+id/main_activity__sprinklerOnIB"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/main_activity__mainRigthGL"
+            app:layout_constraintEnd_toStartOf="@id/main_activity__mainLeftGL"
+            app:layout_constraintBottom_toTopOf="@id/main_activity__mainCenterGL"
+            android:layout_width="wrap_content"
+            android:adjustViewBounds="true"
+            android:layout_height="0dp"
+            android:src="@drawable/sprinkler_on"
+            android:background="@color/white"
+            android:visibility="visible"
+            android:scaleType="fitCenter"
+            android:contentDescription="Press me"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

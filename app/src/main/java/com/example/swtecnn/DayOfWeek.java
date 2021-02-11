@@ -6,6 +6,12 @@ public class DayOfWeek {
     String temperature;
     int weatherImage;
 
+    public DayOfWeek(String date, String temperature, int weatherImage) {
+        this.date = date;
+        this.temperature = temperature;
+        this.weatherImage = weatherImage;
+    }
+
     public String getDate() {
         return date;
     }
@@ -18,9 +24,4 @@ public class DayOfWeek {
         return weatherImage;
     }
 
-    public DayOfWeek(String date, String temperature, int weatherImage) {
-        this.date = date;
-        this.temperature = temperature;
-        this.weatherImage = weatherImage;
-    }
 }
