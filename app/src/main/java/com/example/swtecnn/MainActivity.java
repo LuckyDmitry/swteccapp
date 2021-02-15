@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,17 +28,15 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView placesBoxesRecyclingView = findViewById(R.id.main_activity__rv_placesBoxes);
         CircleProgressView circleProgressView = findViewById(R.id.main_activity__vw_progressCircle);
 
-
-
         AdapterDateWeather adapterDateWeather = new AdapterDateWeather(generateDatesWeather(), content -> {
             Intent intent = new Intent(MainActivity.this, WeatherActivity.class);
             intent.putExtra(EXTRA_MESSAGE, content);
             startActivity(intent);
         });
+
         dateWeatherRecyclingView.setAdapter(adapterDateWeather);
         LinearLayoutManager dateWeatherLayoutManager = new LinearLayoutManager(this);
         dateWeatherRecyclingView.setLayoutManager(dateWeatherLayoutManager);
-
 
         AdapterRightMenu adapterRightMenu = new AdapterRightMenu(generateRightMenuElements());
         placesBoxesRecyclingView.setAdapter(adapterRightMenu);
@@ -46,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
 
         ImageButton sprinklerButton = findViewById(R.id.main_activity__ib_sprinkler);
         sprinklerButton.setTag(R.drawable.sprinkler_on);
-
 
         sprinklerButton.setOnClickListener(v -> {
             Integer resource = (Integer)sprinklerButton.getTag();
@@ -57,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
                 toastMessage = "All tomorrows activities disabled";
                 sprinklerButton.setContentDescription("Button disabled.To turn on double click");
                 adapterRightMenu.setAllCheckBoxesEnabled(false);
-               
+
             }
             else{
                 circleProgressView.reset();

@@ -87,10 +87,13 @@ public class CircleProgressView extends View implements CircleProgress
     @Override
     public void increment() {
         percent++;
-        if(percent > 100){
+        if(percent < 100){
+            invalidate();
+        }
+        else{
             percent = 100;
         }
-        invalidate();
+        
     }
 
     @Override
