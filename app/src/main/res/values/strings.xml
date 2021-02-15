@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">SwTecNN</string>
+    <string name="sometext">SomeText</string>
+    <string name="temp_55c">Temp 55C</string>
+    <string name="weather_image">Weather Image</string>
+    <string name="just_an_image_of_water">Just an image of water</string>
 </resources>

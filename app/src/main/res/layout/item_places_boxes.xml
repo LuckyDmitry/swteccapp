@@ -1,45 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
 
     <TextView
-        android:id="@+id/main_activity__placeTextView"
+        android:id="@+id/item_places_boxes__tv_place"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Backyard"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/main_activity__secondPlaceLeftGuideLine"
-        app:layout_constraintBaseline_toBaselineOf="@id/main_activity__placeCheckBox"
+        android:textSize="25sp"
+        app:layout_constraintBaseline_toBaselineOf="@id/item_places_boxes__cb_left"
+        app:layout_constraintStart_toEndOf="@id/item_places_boxes__gl_secondVertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:gravity="fill_horizontal"
         android:layout_marginEnd="20dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:textSize="25sp"/>
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Backyard" />
+
+    <RadioButton
+        android:id="@+id/item_places_boxes__rb_right"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <CheckBox
-        android:id="@+id/main_activity__placeCheckBox"
+        android:id="@+id/item_places_boxes__cb_left"
         android:layout_width="30dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/main_activity__firstPlaceLeftGuideLine"
-        app:layout_constraintHorizontal_bias="0.98"
-        app:layout_constraintEnd_toStartOf="@id/main_activity__secondPlaceLeftGuideLine" />
+        android:layout_height="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/item_places_boxes__gl_secondVertical"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/main_activity__firstPlaceLeftGuideLine"
+        android:id="@+id/item_places_boxes__gl_firstVertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintGuide_end="160dp"
+        app:layout_constraintGuide_end="190dp"
         android:orientation="vertical"
         />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/main_activity__secondPlaceLeftGuideLine"
+        android:id="@+id/item_places_boxes__gl_secondVertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintGuide_end="130dp"
+        app:layout_constraintGuide_end="160dp"
         android:orientation="vertical"
         />
 

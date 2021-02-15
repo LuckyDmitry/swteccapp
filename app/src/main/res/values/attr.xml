@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CircleProgressView">
+        <attr name="piv_fill_percent" format="integer" />
+        <attr format="color" name="piv_color" />
+        <attr name="piv_percent_width" format="integer"/>
+        <attr name="radius" format="integer" />
+    </declare-styleable>
+
+</resources>

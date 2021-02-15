@@ -2,44 +2,42 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
-        android:id="@+id/dateTextView"
+        android:id="@+id/item_date_weather__tv_dateWeather"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="15sp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/main_activity__dateWeatherRightGuideLine"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="15dp"
-        android:text="February 7, 2020"
-        android:textSize="15sp"
+        app:layout_constraintEnd_toStartOf="@id/item_date_weather__gl_firstRight"
+        tools:text="February 7, 2020"
         />
 
     <ImageView
-        android:id="@+id/weatherImageView"
+        android:id="@+id/item_date_weather__iv_weatherPicture"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        app:layout_constraintTop_toBottomOf="@id/dateTextView"
-        app:layout_constraintStart_toStartOf="@id/dateTextView"
-        />
+        app:layout_constraintTop_toBottomOf="@id/item_date_weather__tv_dateWeather"
+        app:layout_constraintStart_toStartOf="@id/item_date_weather__tv_dateWeather"
+        android:contentDescription="@string/weather_image" />
 
     <TextView
-        android:id="@+id/temperatureTextView"
+        android:id="@+id/item_date_weather__tv_temperature"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/weatherImageView"
-        app:layout_constraintTop_toBottomOf="@id/dateTextView"
-        android:layout_marginStart="15dp"
-        app:layout_constraintEnd_toStartOf="@+id/main_activity__dateWeatherRightGuideLine"
-        android:text="test"
         android:textStyle="bold"
+        android:layout_marginStart="10dp"
         android:textSize="25sp"
+        app:layout_constraintStart_toEndOf="@id/item_date_weather__iv_weatherPicture"
+        app:layout_constraintTop_toBottomOf="@id/item_date_weather__tv_dateWeather"
+        app:layout_constraintEnd_toStartOf="@+id/item_date_weather__gl_firstRight"
+        tools:text="test"
         />
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/main_activity__dateWeatherRightGuideLine"
+        android:id="@+id/item_date_weather__gl_firstRight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
