@@ -2,9 +2,9 @@ package com.example.swtecnn;
 
 public class DayOfWeek {
 
-    String date;
-    String temperature;
-    int weatherImage;
+    private final String date;
+    private final String temperature;
+    private final int weatherImage;
 
     public DayOfWeek(String date, String temperature, int weatherImage) {
         this.date = date;
