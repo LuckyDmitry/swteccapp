@@ -93,7 +93,6 @@ public class CircleProgressView extends View implements CircleProgress
         else{
             percent = 100;
         }
-        
     }
 
     @Override
