@@ -68,20 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
             Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show();
         });
-
-        TextView temperatureView = findViewById(R.id.main_activity__tv_temperatureCenterLeft);
-
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    CurrentWeatherForecast currentWeather = RetrofitClient.INSTANCE.getCurrentWeather().execute().body();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        thread.start();
+        
     }
 
     private ArrayList<DateWeather> generateDatesWeather(){

@@ -32,7 +32,7 @@ public class MyAsyncTask extends AsyncTask<String, Void, Pair<CurrentWeather, Li
             try {
                 list = MyWeatherForecast.getWeekForecast();
                 currentWeather = MyWeatherForecast.getCurrentForecast();
-            } catch (NullPointerException e) {
+            } catch (NullPointerException | IOException e) {
                 e.printStackTrace();
             }
             return new Pair<>(currentWeather, list);
