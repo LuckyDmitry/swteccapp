@@ -91,19 +91,17 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="24sp"
-        android:text="Temp 55 \u2103"
         app:layout_constraintTop_toTopOf="@id/main_activity__gl_secondCenter"
         app:layout_constraintStart_toStartOf="@id/main_activity__gl_left"
-        app:layout_constraintEnd_toStartOf="@+id/main_activity__tv_humanityCenterRight"
+        app:layout_constraintEnd_toStartOf="@+id/main_activity__tv_humidityCenterRight"
         app:layout_constraintBottom_toBottomOf="@id/main_activity__gl_thirdCenter"
         app:layout_constraintHorizontal_chainStyle="spread_inside" />
 
     <TextView
-        android:id="@+id/main_activity__tv_humanityCenterRight"
+        android:id="@+id/main_activity__tv_humidityCenterRight"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="24sp"
-        android:text="Some Text"
         android:maxLines="2"
         app:layout_constraintTop_toTopOf="@id/main_activity__gl_secondCenter"
         app:layout_constraintEnd_toStartOf="@id/main_activity__gl_right"
@@ -136,16 +134,15 @@
 
     <com.example.swtecnn.CircleProgressView
         android:id="@+id/main_activity__vw_progressCircle"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="129dp"
+        android:layout_height="128dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/main_activity__gl_left"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/main_activity__gl_thirdCenter"
         app:piv_color="@color/black_yellow"
-        app:piv_fill_percent="60"
-        app:piv_percent_width="20"
-        />
+        app:piv_fill_percent="100"
+        app:piv_percent_width="20" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

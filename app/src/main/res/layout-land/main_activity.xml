@@ -82,19 +82,17 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="24sp"
-        android:text="@string/temp_55c"
         app:layout_constraintTop_toTopOf="@id/main_activity__gl_secondCenter"
         app:layout_constraintStart_toStartOf="@id/main_activity__gl_left"
-        app:layout_constraintEnd_toStartOf="@+id/main_activity__tv_humanityCenterRight"
+        app:layout_constraintEnd_toStartOf="@+id/main_activity__tv_humidityCenterRight"
         app:layout_constraintBottom_toBottomOf="@id/main_activity__gl_thirdCenter"
         app:layout_constraintHorizontal_chainStyle="spread_inside" />
 
     <TextView
-        android:id="@+id/main_activity__tv_humanityCenterRight"
+        android:id="@+id/main_activity__tv_humidityCenterRight"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="24sp"
-        android:text="@string/sometext"
         app:layout_constraintTop_toTopOf="@id/main_activity__gl_secondCenter"
         app:layout_constraintEnd_toStartOf="@id/main_activity__gl_right"
         app:layout_constraintStart_toEndOf="@id/main_activity__tv_temperatureCenterLeft"

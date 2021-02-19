@@ -33,6 +33,7 @@ public class DateWeather implements Parcelable {
         }
     };
 
+
     public String getDate() {
         return date;
     }
