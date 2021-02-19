@@ -25,6 +25,11 @@ class WeatherWithCoroutines(private val weakReference: WeakReference<MainActivit
                 weakReference.get()?.updateWeatherData()
             })
         }
+
+    }
+
+    fun cancelScope(){
+        scope.cancel()
     }
 
     private fun getCurrentWeather(): Deferred<CurrentWeather> {

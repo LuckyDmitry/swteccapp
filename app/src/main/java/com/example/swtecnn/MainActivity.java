@@ -18,6 +18,9 @@ import java.lang.ref.WeakReference;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity{
+
+    WeatherWithCoroutines weather;
+
     public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -26,7 +29,7 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
-        WeatherWithCoroutines weather = new WeatherWithCoroutines(new WeakReference<>(MainActivity.this));
+        weather = new WeatherWithCoroutines(new WeakReference<>(MainActivity.this));
         weather.downloadWeather();
 
         RecyclerView dateWeatherRecyclingView = findViewById(R.id.main_activity__rv_dateWeather);
@@ -73,6 +76,13 @@ public class MainActivity extends AppCompatActivity{
         });
 
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        weather.cancelScope();
+    }
+
     public void updateWeatherData(){
 
         RecyclerView dateWeatherRecyclingView = findViewById(R.id.main_activity__rv_dateWeather);
