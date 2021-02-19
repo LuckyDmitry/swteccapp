@@ -6,8 +6,8 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import smart.sprinkler.app.api.model.CurrentWeatherForecast
-import smart.sprinkler.app.api.model.WeatherForecast
+import api.model.CurrentWeatherForecast
+import api.model.WeatherForecast
 
 private const val BASE_URL = "https://api.openweathermap.org"
 

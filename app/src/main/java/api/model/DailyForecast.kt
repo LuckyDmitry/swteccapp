@@ -1,13 +1,13 @@
-package smart.sprinkler.app.api.model
+package api.model
 
 import com.google.gson.annotations.SerializedName
 import java.text.SimpleDateFormat
 import java.util.*
 
 data class DailyForecast(
-    val dt: Long,
-    val temp: Temperature,
-    @SerializedName("weather")
+        val dt: Long,
+        val temp: Temperature,
+        @SerializedName("weather")
     val weatherImage: List<WeatherImage>
 ) {
     fun getDate(): String = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault()).run {

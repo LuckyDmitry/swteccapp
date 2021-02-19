@@ -5,8 +5,8 @@ import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 import retrofit2.http.Url
-import smart.sprinkler.app.api.model.CurrentWeatherForecast
-import smart.sprinkler.app.api.model.WeatherForecast
+import api.model.CurrentWeatherForecast
+import api.model.WeatherForecast
 
 private const val API_KEY = "92dd28f1dc9baf629b40f09a07ff87ac"
 

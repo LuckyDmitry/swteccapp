@@ -3,8 +3,6 @@ package com.example.swtecnn;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,21 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 import api.RetrofitClient;
-import api.RetrofitClientKt;
-import api.RetrofitService;
-import retrofit2.Call;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import smart.sprinkler.app.api.model.CurrentWeather;
-import smart.sprinkler.app.api.model.CurrentWeatherForecast;
-import smart.sprinkler.app.api.model.DailyForecast;
-import smart.sprinkler.app.api.model.WeatherForecast;
+import api.model.CurrentWeatherForecast;
 
 public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
