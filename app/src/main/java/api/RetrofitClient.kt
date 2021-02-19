@@ -1,5 +1,6 @@
 package api
 
+import api.model.WeatherForecast
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
@@ -7,7 +8,7 @@ import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import api.model.CurrentWeatherForecast
-import api.model.WeatherForecast
+
 
 private const val BASE_URL = "https://api.openweathermap.org"
 

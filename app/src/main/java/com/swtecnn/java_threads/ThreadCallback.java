@@ -6,6 +6,6 @@ import api.model.CurrentWeather;
 import api.model.DailyForecast;
 
 public interface ThreadCallback {
+    void setData(CurrentWeather currentWeather, List<DailyForecast> weekForecast);
 
-    void setData(CurrentWeather currentWeather, List<DailyForecast> dailyForecasts);
 }

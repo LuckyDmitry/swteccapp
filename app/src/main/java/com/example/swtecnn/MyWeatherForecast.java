@@ -1,7 +1,7 @@
 package com.example.swtecnn;
 
+
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,7 +10,6 @@ import api.model.CurrentWeather;
 import api.model.DailyForecast;
 
 public class MyWeatherForecast {
-
 
     private static CurrentWeather currentWeatherForecast;
     private static List<DailyForecast> weekWeatherForecast; // 7 days

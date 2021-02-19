@@ -1,5 +1,7 @@
 package api.model
 
+import api.model.CurrentWeather
+import api.model.WeatherImage
 import com.google.gson.annotations.SerializedName
 
 data class CurrentWeatherForecast(

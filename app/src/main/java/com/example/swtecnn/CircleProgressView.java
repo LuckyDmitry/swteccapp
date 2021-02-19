@@ -11,6 +11,7 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -18,10 +19,12 @@ import androidx.annotation.RequiresApi;
 public class CircleProgressView extends View implements CircleProgress
 {
 
-    private static final int DEFAULT_PERCENT = 100;
+    private static final int DEFAULT_PERCENT = 0;
     private static final int DEFAULT_STROKE_WIDTH = 20;
     private static final int DEFAULT_COLOR = R.color.black_yellow;
     private static final int DEFAULT_RADIUS = 0;
+
+
 
     Paint paint = new Paint();
 
@@ -30,6 +33,7 @@ public class CircleProgressView extends View implements CircleProgress
     private int percent;
     private int color;
     private int radius;
+    private String textProgress =  percent + "%";
     public CircleProgressView(Context context) {
         this(context, null);
     }
@@ -73,7 +77,13 @@ public class CircleProgressView extends View implements CircleProgress
                 height - radius,
                 width + radius,
                 height + radius);
+        Paint p = new Paint();
+        p.setTextAlign(Paint.Align.CENTER);
+        p.setColor(getResources().getColor(R.color.black_yellow));
         canvas.drawArc(rectF, 270, (float)(percent * 3.6), false, paint);
+        p.setTextSize(width / 3);
+        canvas.drawText(textProgress, rectF.centerX(), rectF.centerY(), p);
+
     }
 
     private int calculateWidth(){

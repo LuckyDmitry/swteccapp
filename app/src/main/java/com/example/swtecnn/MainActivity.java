@@ -12,13 +12,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.IOException;
-import java.util.ArrayList;
+import com.swtecnn.java_threads.MyAsyncTask;
 
-import api.RetrofitClient;
-import api.model.CurrentWeatherForecast;
+import java.lang.ref.WeakReference;
+import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
     public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -28,9 +27,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main_activity);
 
         RecyclerView dateWeatherRecyclingView = findViewById(R.id.main_activity__rv_dateWeather);
-        RecyclerView placesBoxesRecyclingView = findViewById(R.id.main_activity__rv_placesBoxes);
+        downloadWeather();
+        AdapterDateWeather adapterDateWeather = new AdapterDateWeather(HandlerItems.getDayOfWeeks(), content -> {
 
-        AdapterDateWeather adapterDateWeather = new AdapterDateWeather(generateDatesWeather(), content -> {
             Intent intent = new Intent(MainActivity.this, WeatherActivity.class);
             intent.putExtra(EXTRA_MESSAGE, content);
             startActivity(intent);
@@ -39,8 +38,9 @@ public class MainActivity extends AppCompatActivity {
         dateWeatherRecyclingView.setAdapter(adapterDateWeather);
         LinearLayoutManager dateWeatherLayoutManager = new LinearLayoutManager(this);
         dateWeatherRecyclingView.setLayoutManager(dateWeatherLayoutManager);
+        RecyclerView placesBoxesRecyclingView = findViewById(R.id.main_activity__rv_placesBoxes);
 
-        AdapterRightMenu adapterRightMenu = new AdapterRightMenu(generateRightMenuElements());
+        AdapterRightMenu adapterRightMenu = new AdapterRightMenu(HandlerItems.generateRightMenuElements());
         placesBoxesRecyclingView.setAdapter(adapterRightMenu);
         LinearLayoutManager rightMenuLayoutManager = new LinearLayoutManager(this);
         placesBoxesRecyclingView.setLayoutManager(rightMenuLayoutManager);
@@ -49,17 +49,18 @@ public class MainActivity extends AppCompatActivity {
         sprinklerButton.setTag(R.drawable.sprinkler_on);
 
         sprinklerButton.setOnClickListener(v -> {
-            Integer resource = (Integer)sprinklerButton.getTag();
+            Integer resource = (Integer) sprinklerButton.getTag();
             String toastMessage;
-            if(resource == R.drawable.sprinkler_on){
+
+            if (resource == R.drawable.sprinkler_on) {
                 sprinklerButton.setImageResource(R.drawable.sprinkler_off);
                 sprinklerButton.setTag(R.drawable.sprinkler_off);
                 toastMessage = "All tomorrows activities disabled";
                 sprinklerButton.setContentDescription("Button disabled.To turn on double click");
                 adapterRightMenu.setAllCheckBoxesEnabled(false);
 
-            }
-            else{
+
+            } else {
                 sprinklerButton.setImageResource(R.drawable.sprinkler_on);
                 sprinklerButton.setTag(R.drawable.sprinkler_on);
                 toastMessage = "Button enabled";
@@ -68,25 +69,28 @@ public class MainActivity extends AppCompatActivity {
 
             Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show();
         });
-        
     }
 
-    private ArrayList<DateWeather> generateDatesWeather(){
-        ArrayList<DateWeather> dayOfWeeks = new ArrayList<>();
-        for(int i = 0;i < 10; ++i) {
-            dayOfWeeks.add(new DateWeather("February " + i + ", 2021", "23 \u2103", R.drawable.cloudy));
-        }
-        return dayOfWeeks;
+    private void downloadWeather(){
+        MyAsyncTask myAsyncTask = new MyAsyncTask(new WeakReference<>(MainActivity.this),
+                ((currentWeather, weekForecast) -> {
+                    updateWeatherData();
+                    this.runOnUiThread(() -> HandlerItems.setData(currentWeather, weekForecast));
+                }));
+        myAsyncTask.execute();
     }
 
-    private ArrayList<RightMenuElement> generateRightMenuElements(){
-        ArrayList<RightMenuElement> rightMenuBar = new ArrayList<>();
-        rightMenuBar.add(new RightMenuElement("Backyard", false, false, false));
-        rightMenuBar.add(new RightMenuElement("Back Patio", false, false,false));
-        rightMenuBar.add(new RightMenuElement("Front Yard", false, false, false));
-        rightMenuBar.add(new RightMenuElement("Garden", false, true, true));
-        rightMenuBar.add(new RightMenuElement("Porch", false, false, false));
-        return rightMenuBar;
+    private void updateWeatherData(){
+
+        RecyclerView dateWeatherRecyclingView = findViewById(R.id.main_activity__rv_dateWeather);
+
+        Objects.requireNonNull(dateWeatherRecyclingView.getAdapter()).notifyDataSetChanged();
+
+        TextView temperatureView = findViewById(R.id.main_activity__tv_temperatureCenterLeft);
+        TextView humidityView = findViewById(R.id.main_activity__tv_humidityCenterRight);
+        temperatureView.setText(HandlerItems.getCurrentTemperature());
+        humidityView.setText(HandlerItems.getCurrentHumidity());
     }
 
 }
+
