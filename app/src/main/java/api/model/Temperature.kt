@@ -1,4 +1,4 @@
-package smart.sprinkler.app.api.model
+package api.model
 
 data class Temperature(
     val day: Float,

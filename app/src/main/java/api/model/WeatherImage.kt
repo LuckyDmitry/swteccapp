@@ -1,4 +1,4 @@
-package smart.sprinkler.app.api.model
+package api.model
 
 private const val ICON_URL = "https://openweathermap.org/img/wn/"
 
