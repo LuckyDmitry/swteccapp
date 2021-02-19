@@ -20,6 +20,8 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity{
     public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
 
+    MyAsyncTask myAsyncTask;
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +29,19 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.main_activity);
 
         RecyclerView dateWeatherRecyclingView = findViewById(R.id.main_activity__rv_dateWeather);
+
+        if(savedInstanceState != null){
+            myAsyncTask = (MyAsyncTask) getLastNonConfigurationInstance();
+        }
+        if(savedInstanceState == null){
+            myAsyncTask = new MyAsyncTask(new WeakReference<>(MainActivity.this),
+                    ((currentWeather, weekForecast) -> {
+                        updateWeatherData();
+                        this.runOnUiThread(() -> HandlerItems.setData(currentWeather, weekForecast));
+                    }));
+            myAsyncTask.execute();
+        }
+
         downloadWeather();
         AdapterDateWeather adapterDateWeather = new AdapterDateWeather(HandlerItems.getDayOfWeeks(), content -> {
 
