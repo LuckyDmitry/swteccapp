@@ -20,15 +20,24 @@ public class MyWeatherForecast {
 
     public static List<DailyForecast> getWeekForecast() throws IOException {
         if(weekWeatherForecast == null) {
-            weekWeatherForecast = Objects.requireNonNull(retrofit.getWeatherForecast().execute().body()).getDaily();
+            try {
+                weekWeatherForecast = Objects.requireNonNull(retrofit.getWeatherForecast().execute().body()).getDaily();
+            }
+            catch(IOException ex){
+                ex.printStackTrace();
+            }
         }
-
         return weekWeatherForecast;
     }
 
     public static CurrentWeather getCurrentForecast() throws IOException {
         if(currentWeatherForecast == null) {
-            currentWeatherForecast = Objects.requireNonNull(retrofit.getCurrentWeather().execute().body()).getWeather();
+            try {
+                currentWeatherForecast = Objects.requireNonNull(retrofit.getCurrentWeather().execute().body()).getWeather();
+            }
+            catch(IOException ex){
+                ex.printStackTrace();
+            }
         }
 
         return currentWeatherForecast;
