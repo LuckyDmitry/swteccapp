@@ -12,8 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.swtecnn.java_threads.ThreadCallback;
-
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity{

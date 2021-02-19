@@ -27,6 +27,7 @@ public class CircleProgressView extends View implements CircleProgress
 
 
     Paint paint = new Paint();
+    Paint textPaint = new Paint();
 
     RectF rectF = new RectF(0,0,0,0);
     private int strokeWidth;
@@ -37,6 +38,7 @@ public class CircleProgressView extends View implements CircleProgress
     public CircleProgressView(Context context) {
         this(context, null);
     }
+
 
     public CircleProgressView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -77,12 +79,12 @@ public class CircleProgressView extends View implements CircleProgress
                 height - radius,
                 width + radius,
                 height + radius);
-        Paint p = new Paint();
-        p.setTextAlign(Paint.Align.CENTER);
-        p.setColor(getResources().getColor(R.color.black_yellow));
+
+        textPaint.setTextAlign(Paint.Align.CENTER);
+        textPaint.setColor(getResources().getColor(R.color.black_yellow));
         canvas.drawArc(rectF, 270, (float)(percent * 3.6), false, paint);
-        p.setTextSize(width / 3);
-        canvas.drawText(textProgress, rectF.centerX(), rectF.centerY(), p);
+        textPaint.setTextSize((float) (width / 3.0));
+        canvas.drawText(textProgress, rectF.centerX(), rectF.centerY(), textPaint);
 
     }
 
