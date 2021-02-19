@@ -12,7 +12,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.swtecnn.java_threads.ThreadCallback;
+import com.swtecnn.java_threads.ThreadPoolExecutor;
+
+import java.util.List;
 import java.util.Objects;
+
+import api.model.CurrentWeather;
+import api.model.DailyForecast;
 
 public class MainActivity extends AppCompatActivity{
     public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
@@ -22,7 +29,7 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-
+        downloadWeather();
         RecyclerView dateWeatherRecyclingView = findViewById(R.id.main_activity__rv_dateWeather);
         AdapterDateWeather adapterDateWeather = new AdapterDateWeather(HandlerItems.getDayOfWeeks(), content -> {
 
@@ -67,6 +74,24 @@ public class MainActivity extends AppCompatActivity{
         });
 
     }
+
+    private void downloadWeather(){
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(new ThreadCallback() {
+            @Override
+            public void setData(CurrentWeather currentWeather, List<DailyForecast> weekForecast) {
+                HandlerItems.setData(currentWeather, weekForecast);
+                MainActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateWeatherData();
+                    }
+                });
+            }
+        });
+        new Thread(threadPoolExecutor).start();
+    }
+
+
     public void updateWeatherData(){
 
         RecyclerView dateWeatherRecyclingView = findViewById(R.id.main_activity__rv_dateWeather);
