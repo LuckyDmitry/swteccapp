@@ -12,6 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.swtecnn.java_threads.WeatherWithCoroutines;
+
+import java.lang.ref.WeakReference;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity{
@@ -22,6 +25,9 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
+
+        WeatherWithCoroutines weather = new WeatherWithCoroutines(new WeakReference<>(MainActivity.this));
+        weather.downloadWeather();
 
         RecyclerView dateWeatherRecyclingView = findViewById(R.id.main_activity__rv_dateWeather);
         AdapterDateWeather adapterDateWeather = new AdapterDateWeather(HandlerItems.getDayOfWeeks(), content -> {
