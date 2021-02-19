@@ -13,7 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.swtecnn.java_threads.ThreadCallback;
+import com.swtecnn.java_threads.ThreadWithHandler;
 
+import java.lang.ref.WeakReference;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity{
@@ -24,7 +26,8 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-
+        
+        downloadWeather();
         RecyclerView dateWeatherRecyclingView = findViewById(R.id.main_activity__rv_dateWeather);
         AdapterDateWeather adapterDateWeather = new AdapterDateWeather(HandlerItems.getDayOfWeeks(), content -> {
 
@@ -69,6 +72,15 @@ public class MainActivity extends AppCompatActivity{
         });
 
     }
+
+    private void downloadWeather(){
+
+        ThreadWithHandler threadWithHandler = new ThreadWithHandler(new WeakReference<>(MainActivity.this));
+        new Thread(threadWithHandler).start();
+
+    }
+
+
     public void updateWeatherData(){
 
         RecyclerView dateWeatherRecyclingView = findViewById(R.id.main_activity__rv_dateWeather);
