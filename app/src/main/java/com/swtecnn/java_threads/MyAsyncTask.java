@@ -13,7 +13,7 @@ import java.util.List;
 import api.model.CurrentWeather;
 import api.model.DailyForecast;
 
-public class MyAsyncTask extends AsyncTask<String, Void, Pair<CurrentWeather, List<DailyForecast>>> {
+public class MyAsyncTask extends AsyncTask<String, Void, Pair<CurrentWeather, List<DailyForecast>>> implements MyThread{
 
 
     private final WeakReference<MainActivity> mainActivity;
@@ -45,4 +45,9 @@ public class MyAsyncTask extends AsyncTask<String, Void, Pair<CurrentWeather, Li
         this.callbackFunction.setData(currentWeather, list);
     }
 
+
+    @Override
+    public void runMyThread() {
+        this.execute();
+    }
 }

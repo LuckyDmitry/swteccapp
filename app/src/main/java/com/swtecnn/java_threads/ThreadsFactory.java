@@ -8,7 +8,7 @@ public class ThreadsFactory {
         this.thread = thread;
     }
 
-    void startThread(){
+    public void startThread(){
         thread.runMyThread();
     }
 }

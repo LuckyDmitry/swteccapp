@@ -13,9 +13,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.swtecnn.java_threads.MyAsyncTask;
+import com.swtecnn.java_threads.MyThread;
+import com.swtecnn.java_threads.ThreadCallback;
+import com.swtecnn.java_threads.ThreadsFactory;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
 import java.util.Objects;
+
+import api.model.CurrentWeather;
+import api.model.DailyForecast;
 
 public class MainActivity extends AppCompatActivity{
     public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
@@ -30,6 +37,17 @@ public class MainActivity extends AppCompatActivity{
 
         RecyclerView dateWeatherRecyclingView = findViewById(R.id.main_activity__rv_dateWeather);
 
+
+        MyThread myThread = new MyAsyncTask(new WeakReference<>(MainActivity.this), new ThreadCallback() {
+            @Override
+            public void setData(CurrentWeather currentWeather, List<DailyForecast> weekForecast) {
+                HandlerItems.setData(currentWeather, weekForecast);
+                MainActivity.this.updateWeatherData();
+            }
+        });
+        ThreadsFactory threadsFactory = new ThreadsFactory(myThread);
+        threadsFactory.startThread();
+
         if(savedInstanceState != null){
             myAsyncTask = (MyAsyncTask) getLastNonConfigurationInstance();
         }
@@ -42,7 +60,6 @@ public class MainActivity extends AppCompatActivity{
             myAsyncTask.execute();
         }
 
-        downloadWeather();
         AdapterDateWeather adapterDateWeather = new AdapterDateWeather(HandlerItems.getDayOfWeeks(), content -> {
 
             Intent intent = new Intent(MainActivity.this, WeatherActivity.class);
@@ -84,15 +101,6 @@ public class MainActivity extends AppCompatActivity{
 
             Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show();
         });
-    }
-
-    private void downloadWeather(){
-        MyAsyncTask myAsyncTask = new MyAsyncTask(new WeakReference<>(MainActivity.this),
-                ((currentWeather, weekForecast) -> {
-                    updateWeatherData();
-                    this.runOnUiThread(() -> HandlerItems.setData(currentWeather, weekForecast));
-                }));
-        myAsyncTask.execute();
     }
 
     private void updateWeatherData(){
