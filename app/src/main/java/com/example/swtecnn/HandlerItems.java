@@ -17,8 +17,12 @@ public class HandlerItems {
     private static String currentHumidity;
 
     public static void setData(CurrentWeather currentWeather, List<DailyForecast> forecasts){
-        parseWeatherHumidity(currentWeather);
-        parseWeather(forecasts);
+        if(currentWeather != null) {
+            parseWeatherHumidity(currentWeather);
+        }
+        if(forecasts != null) {
+            parseWeather(forecasts);
+        }
     }
 
     public static boolean isDataAvailable(){
@@ -42,6 +46,7 @@ public class HandlerItems {
 
     private static void parseWeather(List<DailyForecast> weatherForecast){
         dayOfWeeks.clear();
+
         if(weatherForecast == null){
             dayOfWeeks.add(new DateWeather(
                     "Download error",
@@ -57,8 +62,14 @@ public class HandlerItems {
 
     private static void parseWeatherHumidity(CurrentWeather weatherForecast){
 
-        currentTemperature = (int) weatherForecast.getTemp() + " \u2103";
-        currentHumidity =  String.valueOf(weatherForecast.getHumidity());
+        if(weatherForecast == null){
+            currentTemperature = "Unknown";
+            currentHumidity = "Unknown";
+        }
+        else {
+            currentTemperature = (int) weatherForecast.getTemp() + " \u2103";
+            currentHumidity = String.valueOf(weatherForecast.getHumidity());
+        }
     }
 
     private static DateWeather getItemWeather(DailyForecast forecast) {
