@@ -1,18 +1,28 @@
 package com.example.swtecnn;
 
 import android.content.Intent;
+import android.content.Loader;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.loader.app.LoaderManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.swtecnn.java_threads.WeatherWithRxJava;
+
+import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.Objects;
+
+import api.model.CurrentWeather;
 
 public class MainActivity extends AppCompatActivity{
     public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
@@ -23,6 +33,10 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
+
+        WeatherWithRxJava weatherWithRxJava = new WeatherWithRxJava(new WeakReference<>(MainActivity.this));
+        weatherWithRxJava.makeRequestCurrentWeather();
+
         RecyclerView dateWeatherRecyclingView = findViewById(R.id.main_activity__rv_dateWeather);
         AdapterDateWeather adapterDateWeather = new AdapterDateWeather(HandlerItems.getDayOfWeeks(), content -> {
 
@@ -30,6 +44,7 @@ public class MainActivity extends AppCompatActivity{
             intent.putExtra(EXTRA_MESSAGE, content);
             startActivity(intent);
         });
+
 
         dateWeatherRecyclingView.setAdapter(adapterDateWeather);
         LinearLayoutManager dateWeatherLayoutManager = new LinearLayoutManager(this);
@@ -80,3 +95,5 @@ public class MainActivity extends AppCompatActivity{
     }
 
 }
+
+
