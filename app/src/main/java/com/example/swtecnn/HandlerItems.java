@@ -53,9 +53,15 @@ public class HandlerItems {
     }
 
     private static void parseWeatherHumidity(CurrentWeather weatherForecast){
+        if(weatherForecast != null) {
+            currentTemperature = (int) weatherForecast.getTemp() + " \u2103";
+            currentHumidity = String.valueOf(weatherForecast.getHumidity());
+        }
+        else {
+            currentTemperature = "Unknown";
+            currentHumidity = "Unknown";
+        }
 
-        currentTemperature = (int) weatherForecast.getTemp() + " \u2103";
-        currentHumidity =  String.valueOf(weatherForecast.getHumidity());
     }
 
     private static DateWeather getItemWeather(DailyForecast forecast) {

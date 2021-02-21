@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity{
 
         RecyclerView dateWeatherRecyclingView = findViewById(R.id.main_activity__rv_dateWeather);
 
-
         MyThread myThread = new MyAsyncTask(new WeakReference<>(MainActivity.this), new ThreadCallback() {
             @Override
             public void setData(CurrentWeather currentWeather, List<DailyForecast> weekForecast) {
@@ -47,18 +46,6 @@ public class MainActivity extends AppCompatActivity{
         });
         ThreadsFactory threadsFactory = new ThreadsFactory(myThread);
         threadsFactory.startThread();
-
-        if(savedInstanceState != null){
-            myAsyncTask = (MyAsyncTask) getLastNonConfigurationInstance();
-        }
-        if(savedInstanceState == null){
-            myAsyncTask = new MyAsyncTask(new WeakReference<>(MainActivity.this),
-                    ((currentWeather, weekForecast) -> {
-                        updateWeatherData();
-                        this.runOnUiThread(() -> HandlerItems.setData(currentWeather, weekForecast));
-                    }));
-            myAsyncTask.execute();
-        }
 
         AdapterDateWeather adapterDateWeather = new AdapterDateWeather(HandlerItems.getDayOfWeeks(), content -> {
 
