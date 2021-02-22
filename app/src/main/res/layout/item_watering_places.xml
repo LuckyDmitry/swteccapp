@@ -7,12 +7,12 @@
 
 
     <TextView
-        android:id="@+id/item_places_boxes__tv_place"
+        android:id="@+id/item_watering_places__tv_place"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="25sp"
-        app:layout_constraintBaseline_toBaselineOf="@id/item_places_boxes__cb_left"
-        app:layout_constraintStart_toEndOf="@id/item_places_boxes__gl_secondVertical"
+        app:layout_constraintBaseline_toBaselineOf="@id/item_watering_places__cb_left"
+        app:layout_constraintStart_toEndOf="@id/item_watering_places__gl_secondVertical"
         app:layout_constraintBottom_toBottomOf="parent"
         android:gravity="fill_horizontal"
         android:layout_marginEnd="20dp"
@@ -20,7 +20,7 @@
         tools:text="Backyard" />
 
     <RadioButton
-        android:id="@+id/item_places_boxes__rb_right"
+        android:id="@+id/item_watering_places__rb_right"
         android:layout_width="30dp"
         android:layout_height="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -28,15 +28,15 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <CheckBox
-        android:id="@+id/item_places_boxes__cb_left"
+        android:id="@+id/item_watering_places__cb_left"
         android:layout_width="30dp"
         android:layout_height="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/item_places_boxes__gl_secondVertical"
+        app:layout_constraintEnd_toStartOf="@id/item_watering_places__gl_secondVertical"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/item_places_boxes__gl_firstVertical"
+        android:id="@+id/item_watering_places__gl_firstVertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintGuide_end="190dp"
@@ -44,7 +44,7 @@
         />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/item_places_boxes__gl_secondVertical"
+        android:id="@+id/item_watering_places__gl_secondVertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintGuide_end="160dp"

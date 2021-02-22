@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 
 import com.example.swtecnn.R;
 
-public class CircleProgressView extends View implements CircleProgress
+public class CircleProgressView extends View
 {
 
     private static final int DEFAULT_PERCENT = 0;
@@ -92,7 +92,6 @@ public class CircleProgressView extends View implements CircleProgress
         return (int)(rectF.bottom - rectF.top);
     }
 
-    @Override
     public void increment() {
         percent++;
         if(percent < 100){
@@ -103,12 +102,10 @@ public class CircleProgressView extends View implements CircleProgress
         }
     }
 
-    @Override
     public int getValue() {
         return percent;
     }
 
-    @Override
     public void reset() {
         percent = 0;
         invalidate();
