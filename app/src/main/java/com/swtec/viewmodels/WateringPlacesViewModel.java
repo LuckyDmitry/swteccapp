@@ -41,9 +41,9 @@ public class WateringPlacesViewModel extends ViewModel {
     private List<WateringPlace> getHardCodePlaces(){
         ArrayList<WateringPlace> places = new ArrayList<>();
         places.add(new WateringPlace("Garden", false, false));
-        places.add(new WateringPlace("Barden", false, false));
-        places.add(new WateringPlace("sadsa", false, true));
-        places.add(new WateringPlace("12321", false, false));
+        places.add(new WateringPlace("House", false, false));
+        places.add(new WateringPlace("Father", false, true));
+        places.add(new WateringPlace("SomePlace", false, false));
         return places;
     }
 }
