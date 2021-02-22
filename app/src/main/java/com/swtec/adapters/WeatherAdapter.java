@@ -2,6 +2,7 @@ package com.swtec.adapters;
 
 import android.content.Context;
 import android.media.Image;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,8 +38,9 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.MyViewHo
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         if(mListWeather != null){
             Weather weather = mListWeather.get(position);
-            holder.mTemperatureTextView.setText(weather.getTemperature());
-            holder.mDateTextView.setText(weather.getDate());
+
+            holder.mTemperatureTextView.setText(String.valueOf(weather.getTemperature()));
+            holder.mDateTextView.setText(String.valueOf(weather.getDate()));
         }
         else{
             holder.mDateTextView.setText("Unknown");
@@ -62,13 +64,13 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.MyViewHo
 
         private final TextView mTemperatureTextView;
         private final TextView mDateTextView;
-        private final ImageView mWeatherImageView;
+        //private final ImageView mWeatherImageView;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             mDateTextView = itemView.findViewById(R.id.item_date_weather__tv_dateWeather);
             mTemperatureTextView = itemView.findViewById(R.id.item_date_weather__tv_temperature);
-            mWeatherImageView = itemView.findViewById(R.id.item_date_weather__iv_weatherPicture);
+            //mWeatherImageView = itemView.findViewById(R.id.item_date_weather__iv_weatherPicture);
         }
     }
 

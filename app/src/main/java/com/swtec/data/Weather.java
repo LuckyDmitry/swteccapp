@@ -1,7 +1,5 @@
 package com.swtec.data;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 public class Weather {
@@ -12,10 +10,8 @@ public class Weather {
     private final Integer mTemperature;
 
     private final Integer mWeatherImage;
-    int a = 0;
 
     public Weather(@NonNull String mDate, @NonNull Integer mTemperature, Integer mWeatherImage) {
-        Log.d("Weather", "Number" + String.valueOf(a++));
         this.mDate = mDate;
         this.mTemperature = mTemperature;
         this.mWeatherImage = mWeatherImage;

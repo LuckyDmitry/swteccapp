@@ -1,0 +1,1288 @@
+diff --git a/app/build.gradle b/app/build.gradle
+index 9bf671e..8453ba9 100644
+--- a/app/build.gradle
++++ b/app/build.gradle
+@@ -34,7 +34,6 @@ dependencies {
+     implementation 'androidx.appcompat:appcompat:1.2.0'
+     implementation 'com.google.android.material:material:1.3.0'
+     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+     testImplementation 'junit:junit:4.13.2'
+     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+@@ -57,7 +56,7 @@ dependencies {
+ 
+ 
+     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2'
+-    implementation "android.arch.lifecycle:extensions:1.1.1"
++
+ 
+     implementation 'io.reactivex.rxjava3:rxjava:3.0.10'
+     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+diff --git a/app/src/androidTest/java/com/example/swtecnn/ExampleInstrumentedTest.java b/app/src/androidTest/java/com/example/swtecnn/ExampleInstrumentedTest.java
+new file mode 100644
+index 0000000..c5c7486
+--- /dev/null
++++ b/app/src/androidTest/java/com/example/swtecnn/ExampleInstrumentedTest.java
+@@ -0,0 +1,26 @@
++package com.example.swtecnn;
++
++import android.content.Context;
++
++import androidx.test.platform.app.InstrumentationRegistry;
++import androidx.test.ext.junit.runners.AndroidJUnit4;
++
++import org.junit.Test;
++import org.junit.runner.RunWith;
++
++import static org.junit.Assert.*;
++
++/**
++ * Instrumented test, which will execute on an Android device.
++ *
++ * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
++ */
++@RunWith(AndroidJUnit4.class)
++public class ExampleInstrumentedTest {
++    @Test
++    public void useAppContext() {
++        // Context of the app under test.
++        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
++        assertEquals("com.example.swtecnn", appContext.getPackageName());
++    }
++}
+\ No newline at end of file
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+index 35d5457..83914d5 100644
+--- a/app/src/main/AndroidManifest.xml
++++ b/app/src/main/AndroidManifest.xml
+@@ -12,14 +12,14 @@
+         android:supportsRtl="true"
+         android:usesCleartextTraffic="true"
+         android:theme="@style/Theme.SwTecNN">
+-        <activity android:name="com.swtec.ui.MainActivity">
++        <activity android:name=".MainActivity">
+             <intent-filter>
+                 <action android:name="android.intent.action.MAIN" />
+ 
+                 <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
+         </activity>
+-        <activity android:name="com.swtec.ui.WeatherActivity"
++        <activity android:name=".WeatherActivity"
+             android:label="@string/app_name"/>
+     </application>
+ 
+diff --git a/app/src/main/java/api/RetrofitClient.kt b/app/src/main/java/api/RetrofitClient.kt
+index 6a3b10c..7abb71d 100644
+--- a/app/src/main/java/api/RetrofitClient.kt
++++ b/app/src/main/java/api/RetrofitClient.kt
+@@ -9,6 +9,7 @@ import retrofit2.Retrofit
+ import retrofit2.converter.gson.GsonConverterFactory
+ import api.model.CurrentWeatherForecast
+ 
++
+ private const val BASE_URL = "https://api.openweathermap.org"
+ 
+ object RetrofitClient {
+diff --git a/app/src/main/java/api/RetrofitService.kt b/app/src/main/java/api/RetrofitService.kt
+index 8c32b8b..be7b49a 100644
+--- a/app/src/main/java/api/RetrofitService.kt
++++ b/app/src/main/java/api/RetrofitService.kt
+@@ -12,7 +12,7 @@ private const val API_KEY = "19ba210ecfb7610eeb21fdb7d7eabd0e"
+ 
+ interface RetrofitService {
+ 
+-    @GET("com/swtec/data/2.5/onecall")
++    @GET("data/2.5/onecall")
+     fun getWeatherForecast(
+         @Query("lat") latitude: Double = 56.302947,
+         @Query("lon") longitude: Double = 44.021527,
+@@ -26,7 +26,7 @@ interface RetrofitService {
+         @Query("appId") apiKey: String = API_KEY
+     ): Call<WeatherForecast>
+ 
+-    @GET("com/swtec/data/2.5/weather")
++    @GET("data/2.5/weather")
+     fun getCurrentWeatherForecast(
+             @Query("q") place: String = arrayOf(
+             "Nizhniy Novgorod", "RUS"
+diff --git a/app/src/main/java/com/example/swtecnn/AdapterDateWeather.java b/app/src/main/java/com/example/swtecnn/AdapterDateWeather.java
+new file mode 100644
+index 0000000..c087091
+--- /dev/null
++++ b/app/src/main/java/com/example/swtecnn/AdapterDateWeather.java
+@@ -0,0 +1,74 @@
++package com.example.swtecnn;
++
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++import android.widget.AdapterView;
++import android.widget.ImageView;
++import android.widget.TextView;
++import android.widget.Toast;
++
++import androidx.annotation.NonNull;
++import androidx.recyclerview.widget.RecyclerView;
++
++import java.util.ArrayList;
++
++public class AdapterDateWeather extends RecyclerView.Adapter<AdapterDateWeather.ViewHolder> {
++
++    public interface OnItemClickListener{
++        void onItemClick(DateWeather content);
++    }
++    private final OnItemClickListener listener;
++    private ArrayList<DateWeather> dateWeatherList = new ArrayList<>();
++    private View.OnClickListener clickListener;
++
++    public AdapterDateWeather(ArrayList<DateWeather> dateWeathers, OnItemClickListener onItemClickListener) {
++        dateWeatherList = dateWeathers;
++        listener = onItemClickListener;
++    }
++
++    @NonNull
++    @Override
++    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
++        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_date_weather, parent, false);
++
++        return new ViewHolder(view);
++    }
++
++    @Override
++    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
++        holder.bind(dateWeatherList.get(position), listener);
++    }
++
++    @Override
++    public int getItemCount() {
++        return dateWeatherList.size();
++    }
++
++    static final class ViewHolder extends RecyclerView.ViewHolder{
++
++        private final TextView dateView;
++        private final TextView tempView;
++        private final ImageView weatherView;
++
++        public ViewHolder(@NonNull View itemView) {
++            super(itemView);
++            dateView = itemView.findViewById(R.id.item_date_weather__tv_dateWeather);
++            tempView = itemView.findViewById(R.id.item_date_weather__tv_temperature);
++            weatherView = itemView.findViewById(R.id.item_date_weather__iv_weatherPicture);
++        }
++
++        public void bind(@NonNull DateWeather dateWeather, final OnItemClickListener listener){
++
++            dateView.setText(dateWeather.getDate());
++            tempView.setText(dateWeather.getTemperature());
++            weatherView.setImageResource(dateWeather.getWeatherImage());
++            itemView.setOnClickListener(new View.OnClickListener() {
++                @Override
++                public void onClick(View v) {
++                    listener.onItemClick(dateWeather);
++                }
++            });
++        }
++    }
++}
+diff --git a/app/src/main/java/com/example/swtecnn/AdapterRightMenu.java b/app/src/main/java/com/example/swtecnn/AdapterRightMenu.java
+new file mode 100644
+index 0000000..70a74fb
+--- /dev/null
++++ b/app/src/main/java/com/example/swtecnn/AdapterRightMenu.java
+@@ -0,0 +1,72 @@
++package com.example.swtecnn;
++
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++import android.widget.CheckBox;
++import android.widget.RadioButton;
++import android.widget.TextView;
++
++import androidx.annotation.NonNull;
++import androidx.recyclerview.widget.RecyclerView;
++
++import java.util.ArrayList;
++
++public class AdapterRightMenu extends RecyclerView.Adapter<AdapterRightMenu.RightMenuViewHolder> {
++
++
++    private ArrayList<RightMenuElement> rightMenuElements = new ArrayList<>();
++    private final ArrayList<RightMenuViewHolder> rightMenuViewHolders = new ArrayList<>();
++
++    AdapterRightMenu(ArrayList<RightMenuElement> rightMenuElements){
++        this.rightMenuElements = rightMenuElements;
++    }
++
++    @NonNull
++    @Override
++    public RightMenuViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
++        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_places_boxes, parent, false);
++        return new RightMenuViewHolder(view);
++    }
++
++    @Override
++    public void onBindViewHolder(@NonNull RightMenuViewHolder holder, int position) {
++        holder.bind(this.rightMenuElements.get(position));
++    }
++
++    @Override
++    public int getItemCount() {
++        return rightMenuElements.size();
++    }
++
++    static final class RightMenuViewHolder extends RecyclerView.ViewHolder{
++
++        private final TextView placeView;
++        private final CheckBox checkboxView;
++        private final RadioButton radioButtonView;
++
++        RightMenuViewHolder(@NonNull View viewHolder){
++            super(viewHolder);
++            placeView = viewHolder.findViewById(R.id.item_places_boxes__tv_place);
++            checkboxView = viewHolder.findViewById(R.id.item_places_boxes__cb_left);
++            radioButtonView = viewHolder.findViewById(R.id.item_places_boxes__rb_right);
++        }
++
++        private void bind(@NonNull RightMenuElement menuElement){
++            placeView.setText(menuElement.getPlace());
++            checkboxView.setChecked(menuElement.isCheckBoxChecked());
++            radioButtonView.setChecked(menuElement.isRadioButtonChecked());
++            radioButtonView.setEnabled(menuElement.isRadioButtonEnabled());
++            if(menuElement.isRadioButtonChecked()){
++                placeView.setTextColor(placeView.getResources().getColor(R.color.green));
++            }
++        }
++    }
++
++    public void setAllCheckBoxesEnabled(boolean flag){
++        for (int i = 0;i < this.rightMenuElements.size();++i){
++            rightMenuElements.get(i).setCheckBoxChecked(false);
++        }
++        notifyDataSetChanged();
++    }
++}
+diff --git a/app/src/main/java/com/swtec/ui/CircleProgress.java b/app/src/main/java/com/example/swtecnn/CircleProgress.java
+similarity index 89%
+rename from app/src/main/java/com/swtec/ui/CircleProgress.java
+rename to app/src/main/java/com/example/swtecnn/CircleProgress.java
+index 7ae05c0..612db86 100644
+--- a/app/src/main/java/com/swtec/ui/CircleProgress.java
++++ b/app/src/main/java/com/example/swtecnn/CircleProgress.java
+@@ -1,4 +1,4 @@
+-package com.swtec.ui;
++package com.example.swtecnn;
+ 
+ public interface CircleProgress {
+ 
+diff --git a/app/src/main/java/com/swtec/ui/CircleProgressView.java b/app/src/main/java/com/example/swtecnn/CircleProgressView.java
+similarity index 88%
+rename from app/src/main/java/com/swtec/ui/CircleProgressView.java
+rename to app/src/main/java/com/example/swtecnn/CircleProgressView.java
+index 19baf69..0785b57 100644
+--- a/app/src/main/java/com/swtec/ui/CircleProgressView.java
++++ b/app/src/main/java/com/example/swtecnn/CircleProgressView.java
+@@ -1,16 +1,20 @@
+-package com.swtec.ui;
++package com.example.swtecnn;
+ 
++import android.app.ActionBar;
+ import android.content.Context;
+ import android.content.res.TypedArray;
+ import android.graphics.Canvas;
++import android.graphics.Color;
+ import android.graphics.Paint;
+ import android.graphics.RectF;
++import android.os.Build;
+ import android.util.AttributeSet;
+ import android.view.View;
++import android.view.ViewGroup;
++import android.widget.TextView;
+ 
+ import androidx.annotation.Nullable;
+-
+-import com.example.swtecnn.R;
++import androidx.annotation.RequiresApi;
+ 
+ public class CircleProgressView extends View implements CircleProgress
+ {
+@@ -23,7 +27,6 @@ public class CircleProgressView extends View implements CircleProgress
+ 
+ 
+     Paint paint = new Paint();
+-    Paint textPaint = new Paint();
+ 
+     RectF rectF = new RectF(0,0,0,0);
+     private int strokeWidth;
+@@ -35,7 +38,6 @@ public class CircleProgressView extends View implements CircleProgress
+         this(context, null);
+     }
+ 
+-
+     public CircleProgressView(Context context, @Nullable AttributeSet attrs) {
+         super(context, attrs);
+ 
+@@ -75,12 +77,12 @@ public class CircleProgressView extends View implements CircleProgress
+                 height - radius,
+                 width + radius,
+                 height + radius);
+-
+-        textPaint.setTextAlign(Paint.Align.CENTER);
+-        textPaint.setColor(getResources().getColor(R.color.black_yellow));
++        Paint p = new Paint();
++        p.setTextAlign(Paint.Align.CENTER);
++        p.setColor(getResources().getColor(R.color.black_yellow));
+         canvas.drawArc(rectF, 270, (float)(percent * 3.6), false, paint);
+-        textPaint.setTextSize((float) (width / 3.0));
+-        canvas.drawText(textProgress, rectF.centerX(), rectF.centerY(), textPaint);
++        p.setTextSize(width / 3);
++        canvas.drawText(textProgress, rectF.centerX(), rectF.centerY(), p);
+ 
+     }
+ 
+diff --git a/app/src/main/java/com/example/swtecnn/DateWeather.java b/app/src/main/java/com/example/swtecnn/DateWeather.java
+new file mode 100644
+index 0000000..105cd0e
+--- /dev/null
++++ b/app/src/main/java/com/example/swtecnn/DateWeather.java
+@@ -0,0 +1,60 @@
++package com.example.swtecnn;
++
++import android.os.Parcel;
++import android.os.Parcelable;
++
++public class DateWeather implements Parcelable {
++
++    private final String date;
++    private final String temperature;
++    private final int weatherImage;
++
++    public DateWeather(String date, String temperature, int weatherImage) {
++        this.date = date;
++        this.temperature = temperature;
++        this.weatherImage = weatherImage;
++    }
++
++    protected DateWeather(Parcel in) {
++        date = in.readString();
++        temperature = in.readString();
++        weatherImage = in.readInt();
++    }
++
++    public static final Creator<DateWeather> CREATOR = new Creator<DateWeather>() {
++        @Override
++        public DateWeather createFromParcel(Parcel in) {
++            return new DateWeather(in);
++        }
++
++        @Override
++        public DateWeather[] newArray(int size) {
++            return new DateWeather[size];
++        }
++    };
++
++
++    public String getDate() {
++        return date;
++    }
++
++    public String getTemperature() {
++        return temperature;
++    }
++
++    public int getWeatherImage() {
++        return weatherImage;
++    }
++
++    @Override
++    public int describeContents() {
++        return 0;
++    }
++
++    @Override
++    public void writeToParcel(Parcel dest, int flags) {
++        dest.writeString(this.date);
++        dest.writeString(this.temperature);
++        dest.writeInt(weatherImage);
++    }
++}
+diff --git a/app/src/main/java/com/example/swtecnn/HandlerItems.java b/app/src/main/java/com/example/swtecnn/HandlerItems.java
+new file mode 100644
+index 0000000..ecfd79e
+--- /dev/null
++++ b/app/src/main/java/com/example/swtecnn/HandlerItems.java
+@@ -0,0 +1,84 @@
++package com.example.swtecnn;
++
++import java.util.ArrayList;
++import java.util.List;
++
++import api.model.CurrentWeather;
++import api.model.DailyForecast;
++
++public class HandlerItems {
++
++
++    private static final ArrayList<DateWeather> dayOfWeeks = new ArrayList<>();
++    private static String currentTemperature;
++    private static String currentHumidity;
++
++    public static void setData(CurrentWeather currentWeather, List<DailyForecast> forecasts){
++        parseWeatherHumidity(currentWeather);
++        parseWeather(forecasts);
++    }
++
++    public static boolean isDataAvailable(){
++        return (!dayOfWeeks.isEmpty()) && (currentTemperature != null && currentHumidity != null);
++    }
++
++    public static ArrayList<DateWeather> getDayOfWeeks() {
++
++        return dayOfWeeks;
++    }
++
++    public static String getCurrentTemperature() {
++
++        return currentTemperature;
++    }
++
++    public static String getCurrentHumidity() {
++
++        return currentHumidity;
++    }
++
++    private static void parseWeather(List<DailyForecast> weatherForecast){
++        dayOfWeeks.clear();
++        if(weatherForecast == null){
++            dayOfWeeks.add(new DateWeather(
++                    "Download error",
++                    "",
++                    0));
++        }
++        else {
++            for (int i = 0; i < weatherForecast.size(); ++i) {
++                dayOfWeeks.add(HandlerItems.getItemWeather(weatherForecast.get(i)));
++            }
++        }
++    }
++
++    private static void parseWeatherHumidity(CurrentWeather weatherForecast){
++        if(weatherForecast != null) {
++            currentTemperature = (int) weatherForecast.getTemp() + " \u2103";
++            currentHumidity = String.valueOf(weatherForecast.getHumidity());
++        }
++        else {
++            currentTemperature = "Unknown";
++            currentHumidity = "Unknown";
++        }
++
++    }
++
++    private static DateWeather getItemWeather(DailyForecast forecast) {
++        return new DateWeather(
++                forecast.getDate(),
++                (int) forecast.getTemp().getDay() + " \u2103",
++                R.drawable.cloudy);
++    }
++
++    public static ArrayList<RightMenuElement> generateRightMenuElements() {
++
++        ArrayList<RightMenuElement> rightMenuBar = new ArrayList<>();
++        rightMenuBar.add(new RightMenuElement("Backyard", false, false, false));
++        rightMenuBar.add(new RightMenuElement("Back Patio", false, false, false));
++        rightMenuBar.add(new RightMenuElement("Front Yard", false, false, false));
++        rightMenuBar.add(new RightMenuElement("Garden", false, true, true));
++        rightMenuBar.add(new RightMenuElement("Porch", false, false, false));
++        return rightMenuBar;
++    }
++}
+diff --git a/app/src/main/java/com/example/swtecnn/MainActivity.java b/app/src/main/java/com/example/swtecnn/MainActivity.java
+new file mode 100644
+index 0000000..e53e7bf
+--- /dev/null
++++ b/app/src/main/java/com/example/swtecnn/MainActivity.java
+@@ -0,0 +1,106 @@
++package com.example.swtecnn;
++
++import android.content.Intent;
++import android.os.Build;
++import android.os.Bundle;
++import android.widget.ImageButton;
++import android.widget.TextView;
++import android.widget.Toast;
++
++import androidx.annotation.RequiresApi;
++import androidx.appcompat.app.AppCompatActivity;
++import androidx.recyclerview.widget.LinearLayoutManager;
++import androidx.recyclerview.widget.RecyclerView;
++
++import com.swtecnn.java_threads.MyAsyncTask;
++import com.swtecnn.java_threads.MyThread;
++import com.swtecnn.java_threads.ThreadCallback;
++import com.swtecnn.java_threads.ThreadsFactory;
++
++import java.lang.ref.WeakReference;
++import java.util.List;
++import java.util.Objects;
++
++import api.model.CurrentWeather;
++import api.model.DailyForecast;
++
++public class MainActivity extends AppCompatActivity{
++    public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
++
++    MyAsyncTask myAsyncTask;
++
++    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        setContentView(R.layout.main_activity);
++
++        RecyclerView dateWeatherRecyclingView = findViewById(R.id.main_activity__rv_dateWeather);
++
++        MyThread myThread = new MyAsyncTask(new WeakReference<>(MainActivity.this), new ThreadCallback() {
++            @Override
++            public void setData(CurrentWeather currentWeather, List<DailyForecast> weekForecast) {
++                HandlerItems.setData(currentWeather, weekForecast);
++                MainActivity.this.updateWeatherData();
++            }
++        });
++        ThreadsFactory threadsFactory = new ThreadsFactory(myThread);
++        threadsFactory.startThread();
++
++        AdapterDateWeather adapterDateWeather = new AdapterDateWeather(HandlerItems.getDayOfWeeks(), content -> {
++
++            Intent intent = new Intent(MainActivity.this, WeatherActivity.class);
++            intent.putExtra(EXTRA_MESSAGE, content);
++            startActivity(intent);
++        });
++
++        dateWeatherRecyclingView.setAdapter(adapterDateWeather);
++        LinearLayoutManager dateWeatherLayoutManager = new LinearLayoutManager(this);
++        dateWeatherRecyclingView.setLayoutManager(dateWeatherLayoutManager);
++        RecyclerView placesBoxesRecyclingView = findViewById(R.id.main_activity__rv_placesBoxes);
++
++        AdapterRightMenu adapterRightMenu = new AdapterRightMenu(HandlerItems.generateRightMenuElements());
++        placesBoxesRecyclingView.setAdapter(adapterRightMenu);
++        LinearLayoutManager rightMenuLayoutManager = new LinearLayoutManager(this);
++        placesBoxesRecyclingView.setLayoutManager(rightMenuLayoutManager);
++
++        ImageButton sprinklerButton = findViewById(R.id.main_activity__ib_sprinkler);
++        sprinklerButton.setTag(R.drawable.sprinkler_on);
++
++        sprinklerButton.setOnClickListener(v -> {
++            Integer resource = (Integer) sprinklerButton.getTag();
++            String toastMessage;
++
++            if (resource == R.drawable.sprinkler_on) {
++                sprinklerButton.setImageResource(R.drawable.sprinkler_off);
++                sprinklerButton.setTag(R.drawable.sprinkler_off);
++                toastMessage = "All tomorrows activities disabled";
++                sprinklerButton.setContentDescription("Button disabled.To turn on double click");
++                adapterRightMenu.setAllCheckBoxesEnabled(false);
++
++
++            } else {
++                sprinklerButton.setImageResource(R.drawable.sprinkler_on);
++                sprinklerButton.setTag(R.drawable.sprinkler_on);
++                toastMessage = "Button enabled";
++                sprinklerButton.setContentDescription("Disable tomorrows watering double click");
++            }
++
++            Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show();
++        });
++    }
++
++    private void updateWeatherData(){
++
++        RecyclerView dateWeatherRecyclingView = findViewById(R.id.main_activity__rv_dateWeather);
++
++        Objects.requireNonNull(dateWeatherRecyclingView.getAdapter()).notifyDataSetChanged();
++
++        TextView temperatureView = findViewById(R.id.main_activity__tv_temperatureCenterLeft);
++        TextView humidityView = findViewById(R.id.main_activity__tv_humidityCenterRight);
++        temperatureView.setText(HandlerItems.getCurrentTemperature());
++        humidityView.setText(HandlerItems.getCurrentHumidity());
++    }
++
++}
++
+diff --git a/app/src/main/java/com/example/swtecnn/MyWeatherForecast.java b/app/src/main/java/com/example/swtecnn/MyWeatherForecast.java
+new file mode 100644
+index 0000000..878cc49
+--- /dev/null
++++ b/app/src/main/java/com/example/swtecnn/MyWeatherForecast.java
+@@ -0,0 +1,34 @@
++package com.example.swtecnn;
++
++
++import java.io.IOException;
++import java.util.List;
++import java.util.Objects;
++
++import api.RetrofitClient;
++import api.model.CurrentWeather;
++import api.model.DailyForecast;
++
++public class MyWeatherForecast {
++
++    private static CurrentWeather currentWeatherForecast;
++    private static List<DailyForecast> weekWeatherForecast; // 7 days
++    private static final RetrofitClient retrofit = RetrofitClient.INSTANCE;
++
++    public static List<DailyForecast> getWeekForecast() throws IOException {
++        if(weekWeatherForecast == null) {
++            weekWeatherForecast = Objects.requireNonNull(retrofit.getWeatherForecast().execute().body()).getDaily();
++        }
++
++        return weekWeatherForecast;
++    }
++
++    public static CurrentWeather getCurrentForecast() throws IOException {
++        if(currentWeatherForecast == null) {
++            currentWeatherForecast = Objects.requireNonNull(retrofit.getCurrentWeather().execute().body()).getWeather();
++        }
++
++        return currentWeatherForecast;
++    }
++
++}
+diff --git a/app/src/main/java/com/example/swtecnn/RightMenuElement.java b/app/src/main/java/com/example/swtecnn/RightMenuElement.java
+new file mode 100644
+index 0000000..cf87cfb
+--- /dev/null
++++ b/app/src/main/java/com/example/swtecnn/RightMenuElement.java
+@@ -0,0 +1,51 @@
++package com.example.swtecnn;
++
++public class RightMenuElement {
++
++    private String place;
++
++    private boolean isCheckBoxChecked;
++    private boolean isRadioButtonEnabled;
++    private boolean isRadioButtonChecked;
++    public RightMenuElement(String place,
++                            boolean isCheckBoxEnabled,
++                            boolean isRadioButtonEnabled,
++                            boolean isRadioButtonChecked) {
++        this.place = place;
++        this.isCheckBoxChecked = isCheckBoxEnabled;
++        this.isRadioButtonEnabled = isRadioButtonEnabled;
++        this.isRadioButtonChecked = isRadioButtonChecked;
++    }
++
++    public String getPlace() {
++        return place;
++    }
++
++    public boolean isRadioButtonChecked() {
++        return isRadioButtonChecked;
++    }
++
++    public void setRadioButtonChecked(boolean radioButtonChecked) {
++        isRadioButtonChecked = radioButtonChecked;
++    }
++
++    public boolean isRadioButtonEnabled() {
++        return isRadioButtonEnabled;
++    }
++
++    public void setRadioButtonEnabled(boolean radioButtonEnabled) {
++        isRadioButtonEnabled = radioButtonEnabled;
++    }
++
++    public void setPlace(String place) {
++        this.place = place;
++    }
++
++    public boolean isCheckBoxChecked() {
++        return isCheckBoxChecked;
++    }
++
++    public void setCheckBoxChecked(boolean checkBoxChecked) {
++        isCheckBoxChecked = checkBoxChecked;
++    }
++}
+diff --git a/app/src/main/java/com/example/swtecnn/WeatherActivity.java b/app/src/main/java/com/example/swtecnn/WeatherActivity.java
+new file mode 100644
+index 0000000..a3ba2b0
+--- /dev/null
++++ b/app/src/main/java/com/example/swtecnn/WeatherActivity.java
+@@ -0,0 +1,37 @@
++package com.example.swtecnn;
++
++import android.app.Activity;
++import android.content.Intent;
++import android.os.Bundle;
++import android.util.Log;
++import android.widget.ImageView;
++import android.widget.TextView;
++
++import androidx.annotation.Nullable;
++import androidx.appcompat.app.AppCompatActivity;
++
++import java.util.Date;
++
++import static com.example.swtecnn.MainActivity.EXTRA_MESSAGE;
++
++public class WeatherActivity extends AppCompatActivity {
++
++    @Override
++    protected void onCreate(@Nullable Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++
++        Log.d("Trifonov", "onCreate" + this.getClass());
++        Bundle bundle = getIntent().getExtras();
++        DateWeather dateWeather = (DateWeather)bundle.getParcelable(EXTRA_MESSAGE);
++        setContentView(R.layout.activity_weather);
++
++        ImageView weatherImageView = findViewById(R.id.activity_weather__iv_weatherPicture);
++        weatherImageView.setImageResource(dateWeather.getWeatherImage());
++
++        TextView temperatureTextView = findViewById(R.id.activity_weather__tv_temperature);
++        temperatureTextView.setText(dateWeather.getTemperature());
++
++        TextView dateTextView = findViewById(R.id.activity_weather__tv_centerDate);
++        dateTextView.setText(dateWeather.getDate());
++    }
++}
+diff --git a/app/src/main/java/com/swtec/adapters/WeatherAdapter.java b/app/src/main/java/com/swtec/adapters/WeatherAdapter.java
+deleted file mode 100644
+index 4d4152a..0000000
+--- a/app/src/main/java/com/swtec/adapters/WeatherAdapter.java
++++ /dev/null
+@@ -1,76 +0,0 @@
+-package com.swtec.adapters;
+-
+-import android.content.Context;
+-import android.media.Image;
+-import android.view.LayoutInflater;
+-import android.view.View;
+-import android.view.ViewGroup;
+-import android.widget.AdapterView;
+-import android.widget.ImageView;
+-import android.widget.TextView;
+-
+-import androidx.annotation.NonNull;
+-import androidx.recyclerview.widget.RecyclerView;
+-
+-import com.example.swtecnn.R;
+-import com.swtec.data.Weather;
+-
+-import java.util.List;
+-
+-public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.MyViewHolder> {
+-
+-    private final LayoutInflater mLayoutInflater;
+-    private List<Weather> mListWeather;
+-
+-    public WeatherAdapter(Context context){
+-        mLayoutInflater = LayoutInflater.from(context);
+-    }
+-
+-    @NonNull
+-    @Override
+-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+-        View view = mLayoutInflater.inflate(R.layout.item_date_weather, parent, false);
+-        return new MyViewHolder(view);
+-    }
+-
+-    @Override
+-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+-        if(mListWeather != null){
+-            Weather weather = mListWeather.get(position);
+-            holder.mTemperatureTextView.setText(weather.getTemperature());
+-            holder.mDateTextView.setText(weather.getDate());
+-        }
+-        else{
+-            holder.mDateTextView.setText("Unknown");
+-        }
+-    }
+-
+-    public void setWeather(List<Weather> weather){
+-        mListWeather = weather;
+-        notifyDataSetChanged();
+-    }
+-
+-    @Override
+-    public int getItemCount() {
+-        if(mListWeather == null){
+-            return 0;
+-        }
+-        return mListWeather.size();
+-    }
+-
+-    class MyViewHolder extends RecyclerView.ViewHolder{
+-
+-        private final TextView mTemperatureTextView;
+-        private final TextView mDateTextView;
+-        private final ImageView mWeatherImageView;
+-
+-        public MyViewHolder(@NonNull View itemView) {
+-            super(itemView);
+-            mDateTextView = itemView.findViewById(R.id.item_date_weather__tv_dateWeather);
+-            mTemperatureTextView = itemView.findViewById(R.id.item_date_weather__tv_temperature);
+-            mWeatherImageView = itemView.findViewById(R.id.item_date_weather__iv_weatherPicture);
+-        }
+-    }
+-
+-
+-}
+diff --git a/app/src/main/java/com/swtec/data/Weather.java b/app/src/main/java/com/swtec/data/Weather.java
+deleted file mode 100644
+index dd301ce..0000000
+--- a/app/src/main/java/com/swtec/data/Weather.java
++++ /dev/null
+@@ -1,35 +0,0 @@
+-package com.swtec.data;
+-
+-import android.util.Log;
+-
+-import androidx.annotation.NonNull;
+-
+-public class Weather {
+-
+-
+-    private final String mDate;
+-
+-    private final Integer mTemperature;
+-
+-    private final Integer mWeatherImage;
+-    int a = 0;
+-
+-    public Weather(@NonNull String mDate, @NonNull Integer mTemperature, Integer mWeatherImage) {
+-        Log.d("Weather", "Number" + String.valueOf(a++));
+-        this.mDate = mDate;
+-        this.mTemperature = mTemperature;
+-        this.mWeatherImage = mWeatherImage;
+-    }
+-
+-    public String getDate() {
+-        return mDate;
+-    }
+-
+-    public Integer getTemperature() {
+-        return mTemperature;
+-    }
+-
+-    public Integer getWeatherImage() {
+-        return mWeatherImage;
+-    }
+-}
+diff --git a/app/src/main/java/com/swtec/repositories/WeatherRepository.java b/app/src/main/java/com/swtec/repositories/WeatherRepository.java
+deleted file mode 100644
+index d817c60..0000000
+--- a/app/src/main/java/com/swtec/repositories/WeatherRepository.java
++++ /dev/null
+@@ -1,109 +0,0 @@
+-package com.swtec.repositories;
+-
+-import android.util.Log;
+-
+-import androidx.lifecycle.AndroidViewModel;
+-import androidx.lifecycle.LiveData;
+-import androidx.lifecycle.MutableLiveData;
+-
+-import com.swtec.data.Weather;
+-
+-import java.io.IOException;
+-import java.util.ArrayList;
+-import java.util.List;
+-
+-import api.RetrofitClient;
+-import api.model.DailyForecast;
+-import api.model.WeatherForecast;
+-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+-import io.reactivex.rxjava3.annotations.NonNull;
+-import io.reactivex.rxjava3.core.Observable;
+-import io.reactivex.rxjava3.core.Observer;
+-import io.reactivex.rxjava3.disposables.Disposable;
+-import io.reactivex.rxjava3.functions.Action;
+-import io.reactivex.rxjava3.functions.Function;
+-import io.reactivex.rxjava3.schedulers.Schedulers;
+-import retrofit2.Call;
+-import retrofit2.Response;
+-
+-public class WeatherRepository {
+-
+-    private final MutableLiveData<List<Weather>> mWeekForecast = new MutableLiveData<>();
+-
+-    public LiveData<List<Weather>> updateWeather(){
+-        Log.d("WeatherRepository", "updateWeather");
+-        new RxNetwork().makeRequest();
+-        return mWeekForecast;
+-    }
+-
+-    private class RxNetwork{
+-
+-        private final List<Weather> weathers = new ArrayList<>();
+-        public void makeRequest() {
+-            Log.d("RxWeatherNetwork", "getWeatherWeekForecast");
+-
+-            //Log.d("RxWeatherNetwork", String.valueOf(weathers.size()));
+-            Disposable disposable = generateObservable()
+-                    .flatMapIterable(dailyForecasts -> dailyForecasts)
+-                    .flatMap(this::dailyForecast2Weather)
+-                    .subscribeOn(Schedulers.io())
+-                    .observeOn(AndroidSchedulers.mainThread())
+-                    .subscribe(weather -> {
+-                                Log.d("Subcribe", weather.toString());
+-                                addWeather(weather);
+-                            },
+-                            throwable -> {
+-                                throwable.printStackTrace();
+-                                Log.d("Here", "er");
+-                            },
+-                            () -> {
+-                                setWeathers();
+-                                Log.d("RxWeatherNetwork1", String.valueOf(mWeekForecast.getValue().size()));
+-                            });
+-
+-            Log.d("RxWeatherNetwork", "above return statement");
+-        }
+-
+-        private void addWeather(Weather updatedWeather) {
+-            Log.d("RxWeatherNetwork", "addWeather");
+-            weathers.add(updatedWeather);
+-        }
+-
+-        private void setWeathers(){
+-            mWeekForecast.setValue(weathers);
+-        }
+-
+-        private Observable<List<DailyForecast>> generateObservable() {
+-            return new Observable<List<DailyForecast>>() {
+-                @Override
+-                protected void subscribeActual(@NonNull Observer<? super List<DailyForecast>> observer) {
+-                    try {
+-                        Log.d("WeatherRepository", "afrer try");
+-                        Call<WeatherForecast> forecastCall = RetrofitClient.INSTANCE.getWeatherForecast();
+-                        Response<WeatherForecast> response = forecastCall.execute();
+-                        if (response.isSuccessful()) {
+-                            observer.onNext(response.body().getDaily());
+-                        }
+-                        else{
+-                            Log.d("WeatherRepository", "error");
+-                        }
+-                        observer.onComplete();
+-                    } catch (IOException e) {
+-                        e.printStackTrace();
+-                    }
+-                }
+-            };
+-        }
+-
+-        private Observable<Weather> dailyForecast2Weather(DailyForecast dailyForecastList) {
+-            return new Observable<Weather>() {
+-                @Override
+-                protected void subscribeActual(@NonNull Observer<? super Weather> observer) {
+-                    Weather weather = new Weather(dailyForecastList.getDate(), (int) dailyForecastList.getTemp().getDay(), null);
+-                    observer.onNext(weather);
+-                    observer.onComplete();
+-                }
+-            };
+-        }
+-    }
+-}
+diff --git a/app/src/main/java/com/swtec/ui/MainActivity.java b/app/src/main/java/com/swtec/ui/MainActivity.java
+deleted file mode 100644
+index 5fe6c43..0000000
+--- a/app/src/main/java/com/swtec/ui/MainActivity.java
++++ /dev/null
+@@ -1,53 +0,0 @@
+-package com.swtec.ui;
+-
+-import android.os.Build;
+-import android.os.Bundle;
+-import android.util.Log;
+-
+-import androidx.annotation.RequiresApi;
+-import androidx.appcompat.app.AppCompatActivity;
+-import androidx.lifecycle.AndroidViewModel;
+-import androidx.lifecycle.Observer;
+-import androidx.lifecycle.ViewModelProvider;
+-import androidx.lifecycle.ViewModelProviders;
+-import androidx.recyclerview.widget.LinearLayoutManager;
+-import androidx.recyclerview.widget.RecyclerView;
+-
+-import com.example.swtecnn.R;
+-import com.swtec.adapters.WeatherAdapter;
+-import com.swtec.data.Weather;
+-import com.swtec.viewmodels.WeatherViewModel;
+-
+-import java.util.List;
+-
+-public class MainActivity extends AppCompatActivity{
+-    public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
+-
+-    private WeatherViewModel mWeatherViewModel;
+-
+-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+-    @Override
+-    protected void onCreate(Bundle savedInstanceState) {
+-        super.onCreate(savedInstanceState);
+-        setContentView(R.layout.main_activity);
+-
+-        mWeatherViewModel = ViewModelProviders.of(this).get(WeatherViewModel.class);
+-
+-        Log.d("MainActivity", "onCreate after setContentView");
+-        RecyclerView recyclerView = findViewById(R.id.main_activity__rv_dateWeather);
+-        WeatherAdapter weatherAdapter = new WeatherAdapter(this);
+-        recyclerView.setAdapter(weatherAdapter);
+-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+-
+-        Log.d("MainActivity", "onCreate after recyclerView");
+-        mWeatherViewModel.updateWeather().observe(this, new Observer<List<Weather>>(){
+-
+-            @Override
+-            public void onChanged(List<Weather> weathers) {
+-                weatherAdapter.setWeather(weathers);
+-            }
+-        });
+-    }
+-}
+-
+-
+diff --git a/app/src/main/java/com/swtec/ui/WeatherActivity.java b/app/src/main/java/com/swtec/ui/WeatherActivity.java
+deleted file mode 100644
+index 3ff5f51..0000000
+--- a/app/src/main/java/com/swtec/ui/WeatherActivity.java
++++ /dev/null
+@@ -1,28 +0,0 @@
+-package com.swtec.ui;
+-
+-import android.os.Bundle;
+-
+-import androidx.annotation.Nullable;
+-import androidx.appcompat.app.AppCompatActivity;
+-
+-public class WeatherActivity extends AppCompatActivity {
+-
+-    @Override
+-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+-        super.onCreate(savedInstanceState);
+-
+-//        Log.d("Trifonov", "onCreate" + this.getClass());
+-//        Bundle bundle = getIntent().getExtras();
+-//        DateWeather dateWeather = (DateWeather)bundle.getParcelable(EXTRA_MESSAGE);
+-//        setContentView(R.layout.activity_weather);
+-//
+-//        ImageView weatherImageView = findViewById(R.id.activity_weather__iv_weatherPicture);
+-//        weatherImageView.setImageResource(dateWeather.getWeatherImage());
+-//
+-//        TextView temperatureTextView = findViewById(R.id.activity_weather__tv_temperature);
+-//        temperatureTextView.setText(dateWeather.getTemperature());
+-//
+-//        TextView dateTextView = findViewById(R.id.activity_weather__tv_centerDate);
+-//        dateTextView.setText(dateWeather.getDate());
+-    }
+-}
+diff --git a/app/src/main/java/com/swtec/viewmodels/WeatherViewModel.java b/app/src/main/java/com/swtec/viewmodels/WeatherViewModel.java
+deleted file mode 100644
+index dc2184c..0000000
+--- a/app/src/main/java/com/swtec/viewmodels/WeatherViewModel.java
++++ /dev/null
+@@ -1,35 +0,0 @@
+-package com.swtec.viewmodels;
+-
+-import android.app.Application;
+-import android.util.Log;
+-
+-import androidx.annotation.NonNull;
+-import androidx.lifecycle.AndroidViewModel;
+-import androidx.lifecycle.LiveData;
+-import androidx.lifecycle.MutableLiveData;
+-import androidx.lifecycle.ViewModel;
+-
+-import com.swtec.data.Weather;
+-import com.swtec.repositories.WeatherRepository;
+-
+-import java.util.List;
+-
+-public class WeatherViewModel extends ViewModel {
+-
+-    private LiveData<List<Weather>> mLiveListWeather;
+-    private WeatherRepository mWeatherRepository;
+-
+-    public WeatherViewModel(){
+-        Log.d("WeatherViewModel", "WeatherViewModel");
+-        mWeatherRepository = new WeatherRepository();
+-    }
+-
+-    public LiveData<List<Weather>> updateWeather(){
+-        Log.d("WeatherViewModel", "getWeather");
+-        if(mLiveListWeather == null){
+-            mLiveListWeather = mWeatherRepository.updateWeather();
+-        }
+-        return mLiveListWeather;
+-    }
+-
+-}
+diff --git a/app/src/main/java/com/swtecnn/java_threads/MyAsyncTask.java b/app/src/main/java/com/swtecnn/java_threads/MyAsyncTask.java
+new file mode 100644
+index 0000000..c0739ca
+--- /dev/null
++++ b/app/src/main/java/com/swtecnn/java_threads/MyAsyncTask.java
+@@ -0,0 +1,58 @@
++package com.swtecnn.java_threads;
++
++import android.os.AsyncTask;
++import android.util.Log;
++import android.util.Pair;
++
++import com.example.swtecnn.MyWeatherForecast;
++import com.example.swtecnn.MainActivity;
++
++import java.io.IOException;
++import java.lang.ref.WeakReference;
++import java.util.List;
++
++import api.model.CurrentWeather;
++import api.model.DailyForecast;
++
++public class MyAsyncTask extends AsyncTask<String, Void, Pair<CurrentWeather, List<DailyForecast>>> implements MyThread{
++
++
++    private final WeakReference<MainActivity> mainActivity;
++    private List<DailyForecast> list = null;
++    private CurrentWeather currentWeather = null;
++    private final ThreadCallback callbackFunction;
++
++    public MyAsyncTask(WeakReference<MainActivity> mainActivityWeakReference, ThreadCallback function){
++        mainActivity = mainActivityWeakReference;
++        callbackFunction = function;
++    }
++
++    @Override
++    protected Pair<CurrentWeather, List<DailyForecast>> doInBackground(String... strings) {
++        Log.d("MyAsyncTask", "doInBackground");
++        if(!isCancelled()) {
++            try {
++                list = MyWeatherForecast.getWeekForecast();
++                currentWeather = MyWeatherForecast.getCurrentForecast();
++                Log.d("MyAsyncTask", "data");
++
++            } catch (NullPointerException | IOException e) {
++                e.printStackTrace();
++            }
++            return new Pair<>(currentWeather, list);
++        }
++        return null;
++    }
++
++    @Override
++    protected void onPostExecute(Pair<CurrentWeather, List<DailyForecast>> currentWeatherListPair) {
++        Log.d("MyAsyncTask", "onPostExecute");
++        this.callbackFunction.setData(currentWeather, list);
++    }
++
++
++    @Override
++    public void runMyThread() {
++        this.execute();
++    }
++}
+\ No newline at end of file
+diff --git a/app/src/main/java/com/swtecnn/java_threads/MyThread.java b/app/src/main/java/com/swtecnn/java_threads/MyThread.java
+new file mode 100644
+index 0000000..41efef3
+--- /dev/null
++++ b/app/src/main/java/com/swtecnn/java_threads/MyThread.java
+@@ -0,0 +1,5 @@
++package com.swtecnn.java_threads;
++
++public interface MyThread {
++    void runMyThread();
++}
+diff --git a/app/src/main/java/com/swtecnn/java_threads/ThreadCallback.java b/app/src/main/java/com/swtecnn/java_threads/ThreadCallback.java
+new file mode 100644
+index 0000000..1f821e7
+--- /dev/null
++++ b/app/src/main/java/com/swtecnn/java_threads/ThreadCallback.java
+@@ -0,0 +1,11 @@
++package com.swtecnn.java_threads;
++
++import java.util.List;
++
++import api.model.CurrentWeather;
++import api.model.DailyForecast;
++
++public interface ThreadCallback {
++    void setData(CurrentWeather currentWeather, List<DailyForecast> weekForecast);
++
++}
+diff --git a/app/src/main/java/com/swtecnn/java_threads/ThreadsFactory.java b/app/src/main/java/com/swtecnn/java_threads/ThreadsFactory.java
+new file mode 100644
+index 0000000..b007d2c
+--- /dev/null
++++ b/app/src/main/java/com/swtecnn/java_threads/ThreadsFactory.java
+@@ -0,0 +1,14 @@
++package com.swtecnn.java_threads;
++
++public class ThreadsFactory {
++
++    MyThread thread;
++
++    public ThreadsFactory(MyThread thread){
++        this.thread = thread;
++    }
++
++    public void startThread(){
++        thread.runMyThread();
++    }
++}
+diff --git a/app/src/main/res/layout-land/main_activity.xml b/app/src/main/res/layout-land/main_activity.xml
+index 93b9ab1..30d7f90 100644
+--- a/app/src/main/res/layout-land/main_activity.xml
++++ b/app/src/main/res/layout-land/main_activity.xml
+@@ -124,7 +124,7 @@
+         tools:text="1"
+         />
+ 
+-    <com.swtec.ui.CircleProgressView
++    <com.example.swtecnn.CircleProgressView
+         android:id="@+id/main_activity__vw_progressCircle"
+         android:layout_width="100dp"
+         android:layout_height="100dp"
+diff --git a/app/src/main/res/layout/main_activity.xml b/app/src/main/res/layout/main_activity.xml
+index 71087a1..1e5c4f9 100644
+--- a/app/src/main/res/layout/main_activity.xml
++++ b/app/src/main/res/layout/main_activity.xml
+@@ -132,7 +132,7 @@
+         app:layout_constraintEnd_toStartOf="@id/main_activity__gl_forButton"
+         />
+ 
+-    <com.swtec.ui.CircleProgressView
++    <com.example.swtecnn.CircleProgressView
+         android:id="@+id/main_activity__vw_progressCircle"
+         android:layout_width="129dp"
+         android:layout_height="128dp"
+diff --git a/app/src/test/java/com/example/swtecnn/ExampleUnitTest.java b/app/src/test/java/com/example/swtecnn/ExampleUnitTest.java
+new file mode 100644
+index 0000000..78b3f9d
+--- /dev/null
++++ b/app/src/test/java/com/example/swtecnn/ExampleUnitTest.java
+@@ -0,0 +1,17 @@
++package com.example.swtecnn;
++
++import org.junit.Test;
++
++import static org.junit.Assert.*;
++
++/**
++ * Example local unit test, which will execute on the development machine (host).
++ *
++ * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
++ */
++public class ExampleUnitTest {
++    @Test
++    public void addition_isCorrect() {
++        assertEquals(4, 2 + 2);
++    }
++}
+\ No newline at end of file
