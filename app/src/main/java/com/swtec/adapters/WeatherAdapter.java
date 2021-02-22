@@ -1,13 +1,9 @@
 package com.swtec.adapters;
 
 import android.content.Context;
-import android.media.Image;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,14 +12,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.swtecnn.R;
 import com.swtec.data.Weather;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.MyViewHolder> {
 
     private final LayoutInflater mLayoutInflater;
-    private List<Weather> mListWeather;
 
-    public WeatherAdapter(Context context){
+    private final List<Weather> mListWeather = new ArrayList<>();
+
+    public WeatherAdapter(Context context) {
         mLayoutInflater = LayoutInflater.from(context);
     }
 
@@ -36,31 +34,23 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        if(mListWeather != null){
-            Weather weather = mListWeather.get(position);
-
-            holder.mTemperatureTextView.setText(String.valueOf(weather.getTemperature()));
-            holder.mDateTextView.setText(String.valueOf(weather.getDate()));
-        }
-        else{
-            holder.mDateTextView.setText("Unknown");
-        }
+        Weather weather = mListWeather.get(position);
+        holder.mTemperatureTextView.setText(String.valueOf(weather.getTemperature()));
+        holder.mDateTextView.setText(String.valueOf(weather.getDate()));
     }
 
-    public void setWeather(List<Weather> weather){
-        mListWeather = weather;
+    public void setWeather(List<Weather> weather) {
+        mListWeather.clear();
+        mListWeather.addAll(weather);
         notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        if(mListWeather == null){
-            return 0;
-        }
         return mListWeather.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder{
+    static class MyViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView mTemperatureTextView;
         private final TextView mDateTextView;

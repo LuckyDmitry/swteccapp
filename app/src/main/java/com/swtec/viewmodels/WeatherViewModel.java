@@ -1,6 +1,8 @@
 package com.swtec.viewmodels;
 
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -11,18 +13,23 @@ import java.util.List;
 
 public class WeatherViewModel extends ViewModel {
 
-    private LiveData<List<Weather>> mLiveListWeather;
     private final WeatherRepo mWeatherRepo;
 
-    public WeatherViewModel(){
+    public WeatherViewModel() {
+        Log.d("WeatherViewModel", "constructor");
+
         mWeatherRepo = new WeatherRepo();
+        mWeatherRepo.fetchForecast();
     }
 
-    public LiveData<List<Weather>> updateWeather(){
-        if(mLiveListWeather == null){
-            mLiveListWeather = mWeatherRepo.updateWeather();
-        }
-        return mLiveListWeather;
+    public LiveData<List<Weather>> getWeather() {
+        return mWeatherRepo.getWeather();
     }
 
+    @Override
+    protected void onCleared() {
+        Log.d("WeatherViewModel", "onCleared");
+        mWeatherRepo.onCleared();
+        super.onCleared();
+    }
 }

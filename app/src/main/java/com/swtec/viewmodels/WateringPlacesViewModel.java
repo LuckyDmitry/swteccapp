@@ -8,42 +8,25 @@ import androidx.lifecycle.ViewModel;
 import com.swtec.data.WateringPlace;
 import com.swtec.repositories.WateringRepo;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class WateringPlacesViewModel extends ViewModel {
 
-    private LiveData<List<WateringPlace>> mWateringPlaces;
-    private WateringRepo mWateringRepo;
+    private final LiveData<List<WateringPlace>> mWateringPlaces;
 
-    public WateringPlacesViewModel(){
-        mWateringRepo = new WateringRepo();
+    private final WateringRepo mWateringRepo = new WateringRepo();
+
+    public WateringPlacesViewModel() {
+        Log.d("WateringPlacesViewModel", "Constructor");
         mWateringPlaces = mWateringRepo.getWateringPlaces();
-        Log.d("WateringPlacesViewModel", "Constructor1");
-        if(mWateringPlaces.getValue() == null){
-            Log.d("WateringPlacesViewModel", "Constructor");
-            for (WateringPlace place:
-                 getHardCodePlaces()) {
-                this.insertPlace(place);
-            }
-        }
     }
 
     public LiveData<List<WateringPlace>> getWateringPlaces() {
         return mWateringPlaces;
     }
 
-    public void insertPlace(WateringPlace place){
-        Log.d("WateringPlacesViewModel", "insertPlace");
-        mWateringRepo.insertPlace(place);
+    public void setWaterPlaces(List<WateringPlace> places) {
+        mWateringRepo.setPlaces(places);
     }
 
-    private List<WateringPlace> getHardCodePlaces(){
-        ArrayList<WateringPlace> places = new ArrayList<>();
-        places.add(new WateringPlace("Garden", false, false));
-        places.add(new WateringPlace("House", false, false));
-        places.add(new WateringPlace("Father", false, true));
-        places.add(new WateringPlace("SomePlace", false, false));
-        return places;
-    }
 }
