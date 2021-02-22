@@ -1,4 +1,4 @@
-package com.example.swtecnn;
+package com.swtec.ui;
 
 public interface CircleProgress {
 

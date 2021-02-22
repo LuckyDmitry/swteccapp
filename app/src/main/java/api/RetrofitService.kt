@@ -12,7 +12,7 @@ private const val API_KEY = "19ba210ecfb7610eeb21fdb7d7eabd0e"
 
 interface RetrofitService {
 
-    @GET("data/2.5/onecall")
+    @GET("com/swtec/data/2.5/onecall")
     fun getWeatherForecast(
         @Query("lat") latitude: Double = 56.302947,
         @Query("lon") longitude: Double = 44.021527,
@@ -26,7 +26,7 @@ interface RetrofitService {
         @Query("appId") apiKey: String = API_KEY
     ): Call<WeatherForecast>
 
-    @GET("data/2.5/weather")
+    @GET("com/swtec/data/2.5/weather")
     fun getCurrentWeatherForecast(
             @Query("q") place: String = arrayOf(
             "Nizhniy Novgorod", "RUS"

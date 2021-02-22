@@ -132,7 +132,7 @@
         app:layout_constraintEnd_toStartOf="@id/main_activity__gl_forButton"
         />
 
-    <com.example.swtecnn.CircleProgressView
+    <com.swtec.ui.CircleProgressView
         android:id="@+id/main_activity__vw_progressCircle"
         android:layout_width="129dp"
         android:layout_height="128dp"
