@@ -124,7 +124,7 @@
         tools:text="1"
         />
 
-    <com.example.swtecnn.CircleProgressView
+    <com.swtec.ui.CircleProgressView
         android:id="@+id/main_activity__vw_progressCircle"
         android:layout_width="100dp"
         android:layout_height="100dp"

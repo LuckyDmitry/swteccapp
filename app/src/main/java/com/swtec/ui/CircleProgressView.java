@@ -1,20 +1,16 @@
-package com.example.swtecnn;
+package com.swtec.ui;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
+
+import com.example.swtecnn.R;
 
 public class CircleProgressView extends View implements CircleProgress
 {
