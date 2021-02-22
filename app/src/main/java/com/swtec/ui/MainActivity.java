@@ -2,13 +2,10 @@ package com.swtec.ui;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -48,7 +45,7 @@ public class MainActivity extends AppCompatActivity{
         mWateringRecyclerView.setAdapter(wateringPlacesAdapter);
         mWateringRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        mWeatherViewModel.updateWeather().observe(this, new Observer<List<Weather>>(){
+        mWeatherViewModel.getWeather().observe(this, new Observer<List<Weather>>(){
 
             @Override
             public void onChanged(List<Weather> weathers) {
