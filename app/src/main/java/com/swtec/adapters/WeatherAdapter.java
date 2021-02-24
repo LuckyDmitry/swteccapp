@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -37,6 +38,7 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.MyViewHo
         Weather weather = mListWeather.get(position);
         holder.mTemperatureTextView.setText(String.valueOf(weather.getTemperature()));
         holder.mDateTextView.setText(String.valueOf(weather.getDate()));
+        holder.mWeatherImageView.setImageResource(R.drawable.cloudy);
     }
 
     public void setWeather(List<Weather> weather) {
@@ -54,13 +56,13 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.MyViewHo
 
         private final TextView mTemperatureTextView;
         private final TextView mDateTextView;
-        //private final ImageView mWeatherImageView;
+        private final ImageView mWeatherImageView;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             mDateTextView = itemView.findViewById(R.id.item_date_weather__tv_dateWeather);
             mTemperatureTextView = itemView.findViewById(R.id.item_date_weather__tv_temperature);
-            //mWeatherImageView = itemView.findViewById(R.id.item_date_weather__iv_weatherPicture);
+            mWeatherImageView = itemView.findViewById(R.id.item_date_weather__iv_weatherPicture);
         }
     }
 

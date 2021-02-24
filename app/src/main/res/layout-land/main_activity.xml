@@ -118,24 +118,24 @@
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:textColor="@color/white"
+        android:text="1"
+        android:contentDescription="You have a notification"
         android:background="@drawable/circle_button"
         app:layout_constraintTop_toTopOf="@id/main_activity__gl_thirdCenter"
         app:layout_constraintEnd_toStartOf="@id/main_activity__gl_forButton"
-        tools:text="1"
         />
 
     <com.swtec.ui.CircleProgressView
         android:id="@+id/main_activity__vw_progressCircle"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:contentDescription="Progress of watering"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/main_activity__gl_left"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/main_activity__gl_thirdCenter"
         app:piv_color="@color/black_yellow"
-        app:piv_fill_percent="25"
+        app:piv_fill_percent="100"
         app:piv_percent_width="20"
         />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

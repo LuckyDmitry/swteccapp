@@ -21,8 +21,8 @@ public class Weather {
         return mDate;
     }
 
-    public Integer getTemperature() {
-        return mTemperature;
+    public String getTemperature() {
+        return mTemperature + "\u2103";
     }
 
     public Integer getWeatherImage() {

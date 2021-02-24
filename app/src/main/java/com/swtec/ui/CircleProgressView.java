@@ -30,7 +30,7 @@ public class CircleProgressView extends View
     private int percent;
     private int color;
     private int radius;
-    private String textProgress =  percent + "%";
+    private String textProgress;
     public CircleProgressView(Context context) {
         this(context, null);
     }
@@ -45,6 +45,7 @@ public class CircleProgressView extends View
             percent = typedArray.getInteger(R.styleable.CircleProgressView_piv_fill_percent, DEFAULT_PERCENT);
             strokeWidth = typedArray.getInteger(R.styleable.CircleProgressView_piv_percent_width, DEFAULT_STROKE_WIDTH);
             color = typedArray.getInteger(R.styleable.CircleProgressView_piv_color, DEFAULT_COLOR);
+            textProgress = percent + "%";
             radius = typedArray.getInteger(R.styleable.CircleProgressView_radius, DEFAULT_RADIUS);
             typedArray.recycle();
         }
@@ -79,7 +80,7 @@ public class CircleProgressView extends View
         textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setColor(getResources().getColor(R.color.black_yellow));
         canvas.drawArc(rectF, 270, (float)(percent * 3.6), false, paint);
-        textPaint.setTextSize((float) (width / 3.0));
+        textPaint.setTextSize((float) (width / 4.0));
         canvas.drawText(textProgress, rectF.centerX(), rectF.centerY(), textPaint);
 
     }

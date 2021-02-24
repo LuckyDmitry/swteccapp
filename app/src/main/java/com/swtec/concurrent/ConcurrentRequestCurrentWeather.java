@@ -1,12 +1,12 @@
 package com.swtec.concurrent;
 
-import com.swtec.data.Weather;
-
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import api.RetrofitClient;
+import api.model.CurrentWeather;
+import api.model.CurrentWeatherForecast;
 import api.model.DailyForecast;
 import api.model.WeatherForecast;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -18,11 +18,11 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import retrofit2.Response;
 
-public class ConcurrentRequestImpl implements IConcurrentRequest {
+public class ConcurrentRequestCurrentWeather implements IConcurrentRequest {
 
-    private final RetrofitClient retrofitClient = RetrofitClient.INSTANCE;
 
-    private OnResultListener mListener;
+    private final RetrofitClient mRetrofitClient = RetrofitClient.INSTANCE;
+    private OnResultListener<com.swtec.data.CurrentWeather> mListener;
 
     private final CompositeDisposable mDisposables = new CompositeDisposable();
 
@@ -39,16 +39,17 @@ public class ConcurrentRequestImpl implements IConcurrentRequest {
 
     @Override
     public void performRequest() {
-        Disposable disposable = generateObservable()
+        Disposable disposable = fetchObservableCurrent()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onSuccess, this::onFailure);
         mDisposables.add(disposable);
+
     }
 
-    private void onSuccess(List<DailyForecast> forecasts) {
+    private void onSuccess(CurrentWeather currentWeather) {
         if (mListener != null) {
-            mListener.onSuccess(dailyForecast2Weather(forecasts));
+            mListener.onSuccess(converter(currentWeather));
         }
     }
 
@@ -58,15 +59,16 @@ public class ConcurrentRequestImpl implements IConcurrentRequest {
         }
     }
 
-    private Observable<List<DailyForecast>> generateObservable() {
-        return new Observable<List<DailyForecast>>() {
+
+    private Observable<api.model.CurrentWeather> fetchObservableCurrent(){
+        return new Observable<CurrentWeather>() {
             @Override
-            protected void subscribeActual(@NonNull Observer<? super List<DailyForecast>> observer) {
+            protected void subscribeActual(@NonNull Observer<? super api.model.CurrentWeather> observer) {
                 try {
-                    Response<WeatherForecast> response = retrofitClient.getWeatherForecast().execute();
+                    Response<CurrentWeatherForecast> response = mRetrofitClient.getCurrentWeather().execute();
                     if (response.isSuccessful()) {
                         if (response.body() != null) {
-                            observer.onNext(response.body().getDaily());
+                            observer.onNext(response.body().getWeather());
                         }
                     }
                     observer.onComplete();
@@ -78,13 +80,7 @@ public class ConcurrentRequestImpl implements IConcurrentRequest {
         };
     }
 
-    private List<Weather> dailyForecast2Weather(List<DailyForecast> forecasts) {
-        List<Weather> weathers = new ArrayList<>();
-        for (DailyForecast forecast : forecasts) {
-            Weather weather = new Weather(forecast.getDate(), (int) forecast.getTemp().getDay(), null);
-            weathers.add(weather);
-        }
-        return weathers;
+    private com.swtec.data.CurrentWeather converter(CurrentWeather weather){
+        return new com.swtec.data.CurrentWeather((int) weather.getTemp(), weather.getHumidity());
     }
-
 }

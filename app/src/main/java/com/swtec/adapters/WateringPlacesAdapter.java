@@ -1,6 +1,7 @@
 package com.swtec.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,9 @@ public class WateringPlacesAdapter extends RecyclerView.Adapter<WateringPlacesAd
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         WateringPlace wateringPlace = mWateringPlaces.get(position);
         holder.mPlaceTextView.setText(wateringPlace.getPlaceName());
+        if(wateringPlace.isRadioButtonChecked()){
+            holder.mPlaceTextView.setTextColor(Color.BLUE);
+        }
         holder.mRightRadioButton.setEnabled(wateringPlace.isRadioButtonChecked());
         holder.mRightRadioButton.setChecked(wateringPlace.isRadioButtonChecked());
         holder.mLeftCheckBox.setChecked(wateringPlace.isCheckBoxChecked());

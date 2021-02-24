@@ -31,10 +31,11 @@ public class WateringRepo {
 
     private List<WateringPlace> getHardCodePlaces(){
         ArrayList<WateringPlace> places = new ArrayList<>();
+        places.add(new WateringPlace("Backyard", false, false));
+        places.add(new WateringPlace("Front yard", false, false));
+        places.add(new WateringPlace("Porch", false, true));
         places.add(new WateringPlace("Garden", false, false));
-        places.add(new WateringPlace("House", false, false));
-        places.add(new WateringPlace("Father", false, true));
-        places.add(new WateringPlace("SomePlace", false, false));
+        places.add(new WateringPlace("Back patio", false, false));
         return places;
     }
 }

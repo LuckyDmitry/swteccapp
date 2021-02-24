@@ -4,9 +4,9 @@ import com.swtec.data.Weather;
 
 import java.util.List;
 
-public interface OnResultListener {
+public interface OnResultListener<T> {
 
-    void onSuccess(List<Weather> weathers);
+    void onSuccess(T element);
 
     void onFailure(Throwable t);
 
