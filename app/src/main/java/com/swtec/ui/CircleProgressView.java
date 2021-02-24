@@ -1,22 +1,18 @@
-package com.example.swtecnn;
+package com.swtec.ui;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 
-public class CircleProgressView extends View implements CircleProgress
+import com.example.swtecnn.R;
+
+public class CircleProgressView extends View
 {
 
     private static final int DEFAULT_PERCENT = 0;
@@ -34,7 +30,7 @@ public class CircleProgressView extends View implements CircleProgress
     private int percent;
     private int color;
     private int radius;
-    private String textProgress =  percent + "%";
+    private String textProgress;
     public CircleProgressView(Context context) {
         this(context, null);
     }
@@ -49,6 +45,7 @@ public class CircleProgressView extends View implements CircleProgress
             percent = typedArray.getInteger(R.styleable.CircleProgressView_piv_fill_percent, DEFAULT_PERCENT);
             strokeWidth = typedArray.getInteger(R.styleable.CircleProgressView_piv_percent_width, DEFAULT_STROKE_WIDTH);
             color = typedArray.getInteger(R.styleable.CircleProgressView_piv_color, DEFAULT_COLOR);
+            textProgress = percent + "%";
             radius = typedArray.getInteger(R.styleable.CircleProgressView_radius, DEFAULT_RADIUS);
             typedArray.recycle();
         }
@@ -83,7 +80,7 @@ public class CircleProgressView extends View implements CircleProgress
         textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setColor(getResources().getColor(R.color.black_yellow));
         canvas.drawArc(rectF, 270, (float)(percent * 3.6), false, paint);
-        textPaint.setTextSize((float) (width / 3.0));
+        textPaint.setTextSize((float) (width / 4.0));
         canvas.drawText(textProgress, rectF.centerX(), rectF.centerY(), textPaint);
 
     }
@@ -96,7 +93,6 @@ public class CircleProgressView extends View implements CircleProgress
         return (int)(rectF.bottom - rectF.top);
     }
 
-    @Override
     public void increment() {
         percent++;
         if(percent < 100){
@@ -107,12 +103,10 @@ public class CircleProgressView extends View implements CircleProgress
         }
     }
 
-    @Override
     public int getValue() {
         return percent;
     }
 
-    @Override
     public void reset() {
         percent = 0;
         invalidate();
